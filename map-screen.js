@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'; 
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { StyleSheet, View } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 
@@ -30,26 +30,23 @@ const Map = () => {
   Geolocation.getCurrentPosition(info => setMyPosition(info));
 
   useEffect(() => {
-    console.log(coordinate)
-    // Promise.all([
-    // fetch(`http://127.0.0.1:5000/geo/${coordinate.latitude}/${coordinate.longitude}`, {
-    //   method: 'get',
-    //   headers: { 'Content-Type': 'application/json' }
-    // }),
-    // fetch(`http://127.0.0.1:5000/geo/${myPosition.coords.latitude}/${myPosition.coords.longitude}`, {
-    //   method: 'get',
-    //   headers: { 'Content-Type': 'application/json' }
-    // })
-    // ])
-    // .then(function (responses) {
-    //   Get a JSON object from each of the responses
-    //   return Promise.all(responses.map(function (response) {
-    //     return response.json();
-    //   }));
-    // }).then(function (data) {
-    //   Log the data to the console
-    //   You would do something with both sets of data here
-    //   console.log(data);})
+    Promise.all([
+      fetch(`http://127.0.0.1:5000/geo/${coordinate.latitude}/${coordinate.longitude}`, {
+        method: 'get',
+        headers: { 'Content-Type': 'application/json' }
+      }),
+      fetch(`http://127.0.0.1:5000/geo/${myPosition.coords.latitude}/${myPosition.coords.longitude}`, {
+        method: 'get',
+        headers: { 'Content-Type': 'application/json' }
+      })
+    ])
+      .then(function (responses) {
+        return Promise.all(responses.map(function (response) {
+          return response.json();
+        }));
+      }).then(function (data) {
+        console.log(data);
+      })
   }, [coordinate]);
 
   return (

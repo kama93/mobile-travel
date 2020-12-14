@@ -49,17 +49,21 @@ def register():
 
 
 # Login
-# @app.route('/register', methods=[ 'POST' ])
-# def register():
-#     user = request.json
-#     name = user['name']
-#     email = user['email']
-#     password = user['password']
-#     if mongo.db.users.find_one({'email': email}):
-#         return "Email exist"
-#     else:
-#         mongo.db.users.insert({'name': name, 'email': email, 'password': bcrypt.generate_password_hash(password), 'authenticated': False})
-#         return 'ok'
+@app.route("/login", methods=["PUT"])
+def login():
+    user = request.json
+    email = user["email"]
+    password = user["password"]
+    user_looked = mongo.db.users.find_one({"email": email})
+    if user_looked is not None:
+        password_DB = user_looked["password"]
+        if check_password_hash(password_DB, password):
+            return jsonify({'email': user_looked['email'], 'name': user_looked['name']})
+        else:
+            return "Incorrect Credentials"
+    else:
+        return "Can't find this user"
+
 
 # getting info about nearby aiports
 @app.route("/geo/<lat>/<lng>", methods=["GET"])
@@ -112,7 +116,7 @@ def get_safe_info():
 
 
 # booking.com scraping
-@app.route('/hotel', methods=['GET'])
+@app.route("/hotel", methods=["GET"])
 def scrape():
     result = bkscraper.get_result(city="New York", limit=1, detail=False)
     return jsonify(result)
