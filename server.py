@@ -58,7 +58,7 @@ def login():
     if user_looked is not None:
         password_DB = user_looked["password"]
         if check_password_hash(password_DB, password):
-            return jsonify({'email': user_looked['email'], 'name': user_looked['name']})
+            return jsonify({"email": user_looked["email"], "name": user_looked["name"]})
         else:
             return "Incorrect Credentials"
     else:
@@ -88,7 +88,7 @@ def geo(lat, lng):
         * np.sin(data["delta_lambda"] / 2) ** 2
     )
     data["c"] = 2 * np.arctan2(np.sqrt(data["a"]), np.sqrt(1 - data["a"]))
-    data = data.nsmallest(5, "c")
+    data = data.nsmallest(4, "c")
     data = data[["latitude_deg", "longitude_deg", "iata_code", "name", "iso_country"]]
     return jsonify(data.to_dict(orient="rows"))
 

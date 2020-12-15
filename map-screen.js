@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { StyleSheet, View, Text, Dimensions, TouchableOpacity } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
-import {CheckBox} from '@react-native-community/checkbox ';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Modal from 'react-native-modal';
 
 const styles = StyleSheet.create({
@@ -22,14 +22,18 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
+  btn: {
+    flexDirection: 'row'
+  }
 });
 const Map = () => {
   // const navigation = useNavigation(); 
   const [coordinate, setCoordinate] = useState({});
   const [myPosition, setMyPosition] = useState({});
   const [visibleModal, setVisibleModal] = useState(false);
-  const [radioButton, setRadioButton] = useState('false');
-  const [from, setFrom] = useState('')
+  const [from, setFrom] = useState([]);
+  const [to, setTo] = useState([]);
+  const [startPoint, setStartPoint] = useState('');
 
   Geolocation.getCurrentPosition(info => setMyPosition(info));
 
@@ -50,11 +54,19 @@ const Map = () => {
             return response.json();
           }));
         }).then(function (data) {
-          console.log(data);
+          setFrom([...data[1]]);
+          setTo([...data[0]])
         })
-      setVisibleModal(true)
     }
   }, [coordinate]);
+
+  useEffect(() => {
+    if (from[0]) {
+      console.log(from)
+      setVisibleModal(true)
+    }
+  }, [from])
+
 
   const closeModal = () => {
     setVisibleModal(false)
@@ -73,22 +85,37 @@ const Map = () => {
         onPress={(event) => setCoordinate(event.nativeEvent.coordinate)}
       >
       </MapView>
-      <Modal animationIn="slideInUp" animationOut="slideOutDown" onBackdropPress={() => closeModal()} onSwipeComplete={() => closeModal()} swipeDirection="right" isVisible={visibleModal} style={{ backgroundColor: 'white', maxHeight: Dimensions.get('window').height / 2, marginTop:200, borderRadius:7 }}>
-        <View style={{ flex: 1, justifyContent: 'center' }}>
-        <CheckBox 
-                title='value1'
-                checkedIcon='dot-circle-o'
-                uncheckedIcon='circle-o'
-                checked={radioButton === 'value1'}
-                onPress={setRadioButton('value1')}
-                ></CheckBox>
+      <Modal animationIn="slideInUp" animationOut="slideOutDown" onBackdropPress={() => closeModal()} onSwipeComplete={() => closeModal()} swipeDirection="right" isVisible={visibleModal} style={{ backgroundColor: 'white', maxHeight: Dimensions.get('window').height / 2, marginTop: 200, borderRadius: 7 }}>
+        <View>
+          <View>
+          <Text style={{ color: '#3D6DCC', padding: 8, fontSize:20 }}>Choose starting airport</Text>
+          {
+            from.map(place =>
+              <TouchableOpacity style={styles.btn} onPress={()=>{setStartPoint(place['iata_code'])}}>
+                <Icon name="plane" size={15} color="black" />
+                <Text style={{ color: 'black', padding: 8 }}>{place['iata_code']} - {place['name']}</Text>
+              </TouchableOpacity>
+            )
+          }
+          </View>
+          <View style={{ flex: 1, justifyContent: 'center'}}>
+          <Text style={{ color: '#3D6DCC', padding: 8, fontSize:20 }}>Choose destination airport</Text>
+          {
+            to.map(place =>
+              <TouchableOpacity style={styles.btn} onPress={()=>{setStartPoint(place['iata_code'])}}>
+                <Icon name="plane" size={15} color="black" />
+                <Text style={{ color: 'black', padding: 8 }}>{place['iata_code']} - {place['name']}</Text>
+              </TouchableOpacity>
+            )
+          }
+          </View>
         </View>
         <View style={{ flex: 1, justifyContent: 'center', position: 'absolute', bottom: 0 }}>
           <View style={{ flexDirection: 'row', }}>
-            <TouchableOpacity style={{ backgroundColor: '#3D6DCC', width: '50%', borderBottomLeftRadius:7 }}>
+            <TouchableOpacity style={{ backgroundColor: '#3D6DCC', width: '50%', borderBottomLeftRadius: 7 }}>
               <Text style={{ color: 'white', textAlign: 'center', padding: 10 }}>Save</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{ backgroundColor: '#3DCC6D', width: '50%', borderBottomRightRadius:7 }} onPress={() => this.closeModal()}>
+            <TouchableOpacity style={{ backgroundColor: '#3DCC6D', width: '50%', borderBottomRightRadius: 7 }} onPress={() => this.closeModal()}>
               <Text style={{ color: 'white', textAlign: 'center', padding: 10 }}>Look again</Text>
             </TouchableOpacity>
           </View>
