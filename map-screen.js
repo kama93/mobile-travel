@@ -77,6 +77,7 @@ const Map = ( { setCurrentLocation, setCurrentDirection } ) => {
   }
 
   const reduxAirports = () => {
+    console.log(startPoint, endPoint)
     setCurrentLocation(startPoint)
     setCurrentDirection(endPoint)
   }
