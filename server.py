@@ -9,15 +9,8 @@ from flask_bcrypt import Bcrypt, check_password_hash
 
 from selectorlib import Extractor
 from time import sleep
-import csv
 
 import reverse_geocoder as rg
-
-from amadeus import Client, ResponseError
-
-amadeus = Client(
-    client_id="4X0Nk2NdtT8FjrmREbywVcqy2ajj15r3", client_secret="xDzYooHD97gUV11K"
-)
 
 e = Extractor.from_yaml_file("booking.yml")
 
@@ -45,7 +38,7 @@ def register():
                 "authenticated": False,
             }
         )
-        return "ok"
+        return jsonify({"name": name, "email": email})
 
 
 # Login

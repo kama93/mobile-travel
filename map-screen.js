@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { StyleSheet, View, Text, Dimensions, TouchableOpacity } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Modal from 'react-native-modal';
+import { setCurrentLocation } from './redux/action-location';
+import { setCurrentDirection } from './redux/action';
 
 const styles = StyleSheet.create({
   container: {
@@ -21,12 +24,10 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-  },
-  btn: {
-    flexDirection: 'row'
   }
-});
-const Map = () => {
+})
+
+const Map = ( { setCurrentLocation, setCurrentDirection } ) => {
   // const navigation = useNavigation(); 
   const [coordinate, setCoordinate] = useState({});
   const [myPosition, setMyPosition] = useState({});
@@ -34,6 +35,7 @@ const Map = () => {
   const [from, setFrom] = useState([]);
   const [to, setTo] = useState([]);
   const [startPoint, setStartPoint] = useState('');
+  const [endPoint, setEndPoint] = useState('');
 
   Geolocation.getCurrentPosition(info => setMyPosition(info));
 
@@ -69,8 +71,16 @@ const Map = () => {
 
 
   const closeModal = () => {
-    setVisibleModal(false)
+    setVisibleModal(false);
+    setCurrentLocation(setStartPoint(''));
+    setCurrentDirection(setEndPoint(''));
   }
+
+  const reduxAirports = () => {
+    setCurrentLocation(startPoint)
+    setCurrentDirection(endPoint)
+  }
+
 
   return (
     <View style={styles.container}>
@@ -85,38 +95,52 @@ const Map = () => {
         onPress={(event) => setCoordinate(event.nativeEvent.coordinate)}
       >
       </MapView>
-      <Modal animationIn="slideInUp" animationOut="slideOutDown" onBackdropPress={() => closeModal()} onSwipeComplete={() => closeModal()} swipeDirection="right" isVisible={visibleModal} style={{ backgroundColor: 'white', maxHeight: Dimensions.get('window').height / 2, marginTop: 200, borderRadius: 7 }}>
+      <Modal animationIn="slideInUp" animationOut="slideOutDown" onBackdropPress={() => closeModal()} swipeDirection="right" isVisible={visibleModal} style={{ backgroundColor: 'white', maxHeight: Dimensions.get('window').height / 2, marginTop: 200, borderRadius: 7 }}>
         <View>
-          <View>
-          <Text style={{ color: '#3D6DCC', padding: 8, fontSize:20 }}>Choose starting airport</Text>
-          {
-            from.map(place =>
-              <TouchableOpacity style={styles.btn} onPress={()=>{setStartPoint(place['iata_code'])}}>
-                <Icon name="plane" size={15} color="black" />
-                <Text style={{ color: 'black', padding: 8 }}>{place['iata_code']} - {place['name']}</Text>
-              </TouchableOpacity>
-            )
-          }
+          <View style={{ padding: 15, marginBottom: 10, marginLeft: 40, marginTop: 20 }}>
+            {startPoint ?
+              <View style={{ padding: 15, marginBottom: 10, marginLeft: 40 }}>
+                <Text style={{ color: '#3D6DCC', padding: 5, fontSize: 25, fontFamily: 'Architects Daughter Regular' }}>Departure :</Text>
+                <Text style={{ color: 'black', padding: 8, fontFamily: 'Architects Daughter Regular', fontSize: 20 }}>{startPoint}</Text>
+              </View> :
+              <View>
+                <Text style={{ color: '#3D6DCC', padding: 5, fontSize: 20, fontFamily: 'Architects Daughter Regular' }}>Choose starting airport</Text>
+                {
+                  from.map(place =>
+                    <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => { setStartPoint(place['iata_code']) }}>
+                      <Icon name="plane" size={15} color="black" />
+                      <Text style={{ color: 'black', padding: 8, fontFamily: 'Architects Daughter Regular', fontSize: 12 }}>{place['iata_code']} - {place['name']}</Text>
+                    </TouchableOpacity>
+                  )
+                }
+              </View>}
           </View>
-          <View style={{ flex: 1, justifyContent: 'center'}}>
-          <Text style={{ color: '#3D6DCC', padding: 8, fontSize:20 }}>Choose destination airport</Text>
-          {
-            to.map(place =>
-              <TouchableOpacity style={styles.btn} onPress={()=>{setStartPoint(place['iata_code'])}}>
-                <Icon name="plane" size={15} color="black" />
-                <Text style={{ color: 'black', padding: 8 }}>{place['iata_code']} - {place['name']}</Text>
-              </TouchableOpacity>
-            )
-          }
+          <View style={{ padding: 15, marginBottom: 60, marginLeft: 40 }}>
+          {endPoint ?
+              <View style={{ padding: 15, marginBottom: 60, marginLeft: 40 }}>
+                <Text style={{ color: '#3D6DCC', padding: 5, fontSize: 25, fontFamily: 'Architects Daughter Regular' }}>Arrival :</Text>
+                <Text style={{ color: 'black', padding: 8, fontFamily: 'Architects Daughter Regular', fontSize: 20 }}>{endPoint}</Text>
+              </View> :
+              <View>
+            <Text style={{ color: '#3D6DCC', padding: 5, fontSize: 20, fontFamily: 'Architects Daughter Regular' }}>Choose destination airport</Text>
+            {
+              to.map(place =>
+                <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => { setEndPoint(place['iata_code']) }}>
+                  <Icon name="plane" size={15} color="black" />
+                  <Text style={{ color: 'black', padding: 8, fontFamily: 'Architects Daughter Regular', fontSize: 12 }}>{place['iata_code']} - {place['name']}</Text>
+                </TouchableOpacity>
+              )
+            }
+            </View>}
           </View>
         </View>
         <View style={{ flex: 1, justifyContent: 'center', position: 'absolute', bottom: 0 }}>
           <View style={{ flexDirection: 'row', }}>
-            <TouchableOpacity style={{ backgroundColor: '#3D6DCC', width: '50%', borderBottomLeftRadius: 7 }}>
-              <Text style={{ color: 'white', textAlign: 'center', padding: 10 }}>Save</Text>
+            <TouchableOpacity style={{ backgroundColor: '#3D6DCC', width: '50%', borderBottomLeftRadius: 7 }} onPress={() => reduxAirports()}>
+              <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>Save</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{ backgroundColor: '#3DCC6D', width: '50%', borderBottomRightRadius: 7 }} onPress={() => this.closeModal()}>
-              <Text style={{ color: 'white', textAlign: 'center', padding: 10 }}>Look again</Text>
+            <TouchableOpacity style={{ backgroundColor: '#3DCC6D', width: '50%', borderBottomRightRadius: 7 }} onPress={() => closeModal()}>
+              <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>Look again</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -126,4 +150,9 @@ const Map = () => {
   );
 };
 
-export default Map;
+const mapDispatchToProps = dispatch => ({
+  setCurrentLocation: location => dispatch(setCurrentLocation(location)),
+  setCurrentDirection: direction => dispatch(setCurrentDirection(direction))
+})
+
+export default connect(null, mapDispatchToProps)(Map);

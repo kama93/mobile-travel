@@ -1,8 +1,10 @@
 import 'react-native-gesture-handler';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import { connect } from 'react-redux';
+import { setCurrentUser } from './redux/actions-user';
 import { View, StyleSheet, TextInput, ImageBackground, TouchableOpacity, Text } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { Button } from 'react-native-elements';
+import { useNavigation } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
   inputBackground: {
@@ -14,12 +16,12 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(46, 49, 49, 1)',
     shadowOpacity: 1.0,
   },
-  registrationTitle:{
+  registrationTitle: {
     fontSize: 20,
-    margin:10,
+    margin: 10,
     fontFamily: 'Architects Daughter Regular'
   },
-  inputStyle:{ 
+  inputStyle: {
     height: 50,
     borderColor: 'rgba(46, 49, 49, 1)',
     borderWidth: 1.5,
@@ -36,16 +38,43 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0
   },
-  registrationLink:{
+  registrationLink: {
     fontSize: 20,
     fontFamily: 'Architects Daughter Regular'
   },
-  textRegistrationContainer:{
+  textRegistrationContainer: {
     alignItems: 'center'
   }
 });
 
-const Registration = () => {
+const Registration = ( { setCurrentUser } ) => {
+  const [signUpEmail, setSignUpEmail] = useState('');
+  const [name, setName] = useState('');
+  const [signUpPassword, setSignUpPassword] = useState('');
+
+  const navigation = useRef(useNavigation());
+
+  const signUpFetch = () => {
+    fetch('http://127.0.0.1:5000/register', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: name,
+        email: signUpEmail,
+        password: signUpPassword,
+      })
+    })
+    .then(response => response.json())
+    .then(user => {
+      if (user.name) {
+        setCurrentUser(user);
+        navigation.current.navigate("Home");
+      } else {
+        alert('you need register')
+      }
+    })
+  }
+
   return (
     <View>
       <ImageBackground source={require('./image/registration.png')} resizeMode='cover' style={styles.image}
@@ -57,40 +86,55 @@ const Registration = () => {
             style={styles.inputStyle}
             placeholder="Name"
             placeholderTextColor="rgba(46, 49, 49, 1)"
-            // onChangeText={text => onChangeText(text)}
-            // value={value}
+            onChangeText={text => setName(text)}
+            value={name}
           />
           <TextInput
             style={styles.inputStyle}
             placeholder="Email"
             placeholderTextColor="rgba(46, 49, 49, 1)"
-            // onChangeText={text => onChangeText(text)}
-            // value={value}
+            onChangeText={text => setSignUpEmail(text)}
+            value={signUpEmail}
           />
           <TextInput
             style={styles.inputStyle}
+            secureTextEntry={true}
             placeholder="Password"
             placeholderTextColor="rgba(46, 49, 49, 1)"
-            // onChangeText={text => onChangeText2(text)}
-            // value={value2}
+            onChangeText={text => setSignUpPassword(text)}
+            value={signUpPassword}
           />
-          <TextInput
-            style={styles.inputStyle}
-            placeholder="Confirm Passowrd"
-            placeholderTextColor="rgba(46, 49, 49, 1)"
-            // onChangeText={text => onChangeText2(text)}
-            // value={value2}
-          />
+          <View style={styles.date2}>
+            <Button title="SignUp!"
+              onPress={() => signUpFetch()}
+              titleStyle={{
+                color: "white",
+                fontSize: 16,
+                fontFamily: 'Architects Daughter Regular'
+              }}
+              buttonStyle={{
+                borderRadius: 60,
+                margin: 20,
+                padding: 5
+              }}
+            />
+          </View>
           <TouchableOpacity
-                onPress={this.onPress}
-                style={styles.textRegistrationContainer}
-              >
-                <Text style={styles.registrationLink}>Login HERE!</Text>
-              </TouchableOpacity>
+            onPress={this.onPress}
+            style={styles.textRegistrationContainer}
+          >
+            <Text style={styles.registrationLink}>Login HERE!</Text>
+          </TouchableOpacity>
         </View>
       </ImageBackground>
     </View>
   );
 };
 
-export default Registration;
+const mapDispatchToProps = dispatch => {
+  return {
+    setCurrentUser: user => dispatch(setCurrentUser(user))
+  }
+}
+
+export default connect(null, mapDispatchToProps)(Registration);

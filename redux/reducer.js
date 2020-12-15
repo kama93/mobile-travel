@@ -4,7 +4,7 @@ const INITIAL_STATE = {
   
   const userDirection = (state = INITIAL_STATE, action) => {
     switch (action.type) {
-      case 'SET_CURRENT_USER':
+      case 'SET_CURRENT_DIRECTION':
         return {
           ...state,
           currentDirection: action.payload

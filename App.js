@@ -1,8 +1,10 @@
 import 'react-native-gesture-handler';
 import React from 'react';
+import { Provider } from 'react-redux';
+import { store } from './redux/store.js'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Button, Image, TouchableOpacity, Text } from 'react-native';
+import { TouchableOpacity, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import HomeScreen from './home-screen.js';
 import Map from './map-screen';
@@ -11,11 +13,11 @@ import Hotels from './hotels';
 import LogIn from './login';
 import Registration from './registration'
 
-
 const Stack = createStackNavigator();
 
 const App = () => {
   return (
+    <Provider store={store}>
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
@@ -160,6 +162,7 @@ const App = () => {
         />
       </Stack.Navigator>
     </NavigationContainer>
+    </Provider>
   );
 };
 

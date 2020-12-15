@@ -46,6 +46,9 @@ const styles = StyleSheet.create({
 });
 
 const Login = () => {
+  let [signInEmail, setSignInEmail] = useState('');
+  let [signInPassword, setSignInPassword] = useState('');
+
   return (
     <View>
       <ImageBackground source={require('./image/login.png')} resizeMode='cover' style={styles.image}
@@ -55,18 +58,33 @@ const Login = () => {
           <Text style={styles.loginTitle}>Please login to your account</Text>
           <TextInput
             style={styles.inputStyle}
-            placeholder="User"
+            placeholder="Email"
             placeholderTextColor="rgba(46, 49, 49, 1)"
-            // onChangeText={text => onChangeText(text)}
-            // value={value}
+            onChangeText={text => setSignInEmail(text)}
+            value={signInEmail}
           />
           <TextInput
             style={styles.inputStyle}
             placeholder="Password"
             placeholderTextColor="rgba(46, 49, 49, 1)"
-            // onChangeText={text => onChangeText2(text)}
-            // value={value2}
+            onChangeText={text => setSignInPassword(text)}
+            value={signInPassword}
           />
+           <View style={styles.date2}>
+            <Button title="SignIn!"
+              onPress={() => signUpFetch()}
+              titleStyle={{
+                color: "white",
+                fontSize: 16,
+                fontFamily: 'Architects Daughter Regular'
+              }}
+              buttonStyle={{
+                borderRadius: 60,
+                margin: 20,
+                padding: 5
+              }}
+            />
+          </View>
           <TouchableOpacity
                 onPress={this.onPress}
                 style={styles.textRegistrationContainer}
