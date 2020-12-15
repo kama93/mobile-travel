@@ -60,6 +60,7 @@ const Flight = () => {
   const showModeStart = () => {
     setShowStart(!showStart);
   };
+  
   const showModeFinal = () => {
     setShowFinal(!showFinal);
   };
@@ -95,7 +96,7 @@ const Flight = () => {
                 }}
                 buttonStyle={{
                   borderRadius: 60,
-                  margin:20,
+                  margin: 20,
                   padding: 5
                 }}
               />
@@ -120,7 +121,7 @@ const Flight = () => {
                 }}
                 buttonStyle={{
                   borderRadius: 60,
-                  margin:20,
+                  margin: 20,
                   padding: 5
                 }}
               />
