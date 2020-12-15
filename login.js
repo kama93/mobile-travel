@@ -1,8 +1,10 @@
 import 'react-native-gesture-handler';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import { connect } from 'react-redux';
+import { setCurrentUser } from './redux/actions-user';
 import { View, StyleSheet, TextInput, ImageBackground, TouchableOpacity, Text } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { Button } from 'react-native-elements';
+import { useNavigation } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
   inputBackground: {
@@ -45,10 +47,33 @@ const styles = StyleSheet.create({
   }
 });
 
-const Login = () => {
+
+const Login = ( { setCurrentUser } ) => {
   let [signInEmail, setSignInEmail] = useState('');
   let [signInPassword, setSignInPassword] = useState('');
 
+  const navigation = useRef(useNavigation());
+
+  const signInFetch = () => {
+    fetch('http://127.0.0.1:5000/login', {
+      method: 'put',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: signInEmail,
+        password: signInPassword,
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.name) {
+        setCurrentUser(data);
+        navigation.current.navigate("Home");
+      } else {
+        alert('you need register')
+      }
+    })
+  }
+  
   return (
     <View>
       <ImageBackground source={require('./image/login.png')} resizeMode='cover' style={styles.image}
@@ -72,7 +97,7 @@ const Login = () => {
           />
            <View style={styles.date2}>
             <Button title="SignIn!"
-              onPress={() => signUpFetch()}
+              onPress={() => signInFetch()}
               titleStyle={{
                 color: "white",
                 fontSize: 16,
@@ -86,7 +111,7 @@ const Login = () => {
             />
           </View>
           <TouchableOpacity
-                onPress={this.onPress}
+                onPress={() => navigation.current.navigate("Registration")}
                 style={styles.textRegistrationContainer}
               >
                 <Text style={styles.registrationLink}>Registration HERE!</Text>
@@ -97,4 +122,10 @@ const Login = () => {
   );
 };
 
-export default Login;
+const mapDispatchToProps = dispatch => {
+  return {
+    setCurrentUser: user => dispatch(setCurrentUser(user))
+  }
+}
+
+export default connect(null, mapDispatchToProps)(Login);

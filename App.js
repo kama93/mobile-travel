@@ -43,7 +43,6 @@ const App = () => {
             headerLeft: () => (
               <TouchableOpacity
                 style={{ marginLeft: 25 }}
-                onPress={() => navigation.navigate('Registration')}
               >
                 <Text><Icon name="bars" size={30} color="white" />
                 </Text>

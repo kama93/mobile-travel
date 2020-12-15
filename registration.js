@@ -120,7 +120,7 @@ const Registration = ( { setCurrentUser } ) => {
             />
           </View>
           <TouchableOpacity
-            onPress={this.onPress}
+            onPress={() => navigation.current.navigate("LogIn")}
             style={styles.textRegistrationContainer}
           >
             <Text style={styles.registrationLink}>Login HERE!</Text>
