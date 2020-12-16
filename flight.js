@@ -1,6 +1,7 @@
 import 'react-native-gesture-handler';
-import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, ImageBackground } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Text, ImageBackground, TouchableOpacity } from 'react-native';
+import Autocomplete from 'react-native-autocomplete-input';
 import { Button } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -21,12 +22,10 @@ const styles = StyleSheet.create({
   inputStyle: {
     height: 50,
     borderColor: 'grey',
-    borderWidth: 1.5,
-    width: 250,
-    margin: 10,
-    borderRadius: 5,
-    fontSize: 20,
-    fontFamily: 'Architects Daughter Regular'
+    borderWidth: 0,
+    width: 350,
+    marginBottom: 15,
+    borderRadius: 10,
   },
   image: {
     height: '100%',
@@ -35,10 +34,33 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0
   },
+  itemText: {
+    fontSize: 15,
+    padding:8,
+    margin: 2,
+    fontFamily: 'Architects Daughter Regular',
+  },
+  textPicked:{
+    fontSize: 20,
+    fontFamily: 'Architects Daughter Regular',
+    marginBottom: 25,
+    color: "#696969"
+  },
+  inputAutocomplete:{
+    fontFamily: 'Architects Daughter Regular',
+    fontSize: 20,
+    padding: 10,
+  },
+  containerList:{
+    zIndex: 1000,
+  },
 });
 
 const Flight = () => {
-  const [value, onChangeText] = React.useState();
+  const [lookingDataStart, setLookingDataStart] = useState();
+  const [lookingDataEnd, setLookingDataEnd] = useState();
+  const [startPoint, setStartPoint] = useState(null);
+  const [endPoint, setEndPoint] = useState(null);
   const [value2, onChangeText2] = React.useState();
   const [dateStart, setDateStart] = useState(new Date(1598051730000));
   const [dateFinal, setDateFinal] = useState(new Date(1598051730000));
@@ -60,31 +82,88 @@ const Flight = () => {
   const showModeStart = () => {
     setShowStart(!showStart);
   };
-  
+
   const showModeFinal = () => {
     setShowFinal(!showFinal);
   };
 
+  const lookingForCityStart = (text) => {
+    if (text.length > 3) {
+      console.log(text)
+      fetch(`http://127.0.0.1:5000/auto/${text}`, {
+        method: 'get',
+        headers: { 'Content-Type': 'application/json' }
+      })
+        .then(response => response.json())
+        .then(data => setLookingDataStart(data))
+    }
+  }
 
-  // const { to, from } = route.params;
+  const lookingForCityEnd = (text) => {
+    if (text.length > 3) {
+      console.log(text)
+      fetch(`http://127.0.0.1:5000/auto/${text}`, {
+        method: 'get',
+        headers: { 'Content-Type': 'application/json' }
+      })
+        .then(response => response.json())
+        .then(data => setLookingDataEnd(data))
+    }
+  }
+
   return (
     <View>
       <ImageBackground source={require('./image/plane-background.jpg')} resizeMode='cover' style={styles.image}
         imageStyle={{ opacity: 0.8 }}
       >
         <View style={styles.inputBackground}>
-          <TextInput
-            style={styles.inputStyle}
-            placeholder="From (city)"
-            onChangeText={text => onChangeText(text)}
-            value={value}
-          />
-          <TextInput
-            style={styles.inputStyle}
-            placeholder="To (city)"
-            onChangeText={text => onChangeText2(text)}
-            value={value2}
-          />
+          {!startPoint ?
+            (<View style={styles.containerList}>
+            <Autocomplete
+              autoCapitalize="none"
+              autoCorrect={false}
+              containerStyle={styles.inputStyle}
+              style={styles.inputAutocomplete}
+              listStyle={styles.listStyle}
+              data={lookingDataStart}
+              // defaultValue={lookingData}
+              onChangeText={text => lookingForCityStart(text)}
+              placeholder="From (city)"
+              renderItem={({ item, i }) => (
+                <TouchableOpacity onPress={() => setStartPoint({'code': item.iata_code, 'name': item.name, 'region': item.municipality})}>
+                  <Text style={styles.itemText}>
+                    {item.municipality} - {item.name}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            /></View>)
+            :
+            (<Text style={styles.textPicked}>
+              Departure: {startPoint.name} - {startPoint.region}
+            </Text>)}
+            {!endPoint ?
+            (<Autocomplete
+              autoCapitalize="none"
+              autoCorrect={false}
+              containerStyle={styles.inputStyle}
+              style={styles.inputAutocomplete}
+              listStyle={styles.listStyle}
+              data={lookingDataEnd}
+              // defaultValue={lookingData}
+              onChangeText={text => lookingForCityEnd(text)}
+              placeholder="To (city)"
+              renderItem={({ item, i }) => (
+                <TouchableOpacity onPress={() => setEndPoint({'code': item.iata_code, 'name': item.name, 'region': item.municipality}) }>
+                  <Text style={styles.itemText}>
+                    {item.municipality} - {item.name}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            />)
+            :
+            (<Text style={styles.textPicked}>
+              Arrival: {endPoint.name} - {endPoint.region}
+            </Text>)}
           <View style={styles.dateContainer}>
             <View style={styles.date}>
               <Button title="Start day!"
