@@ -12,6 +12,7 @@ import Flight from './flight';
 import Hotels from './hotels';
 import LogIn from './login';
 import Registration from './registration'
+import HederIconLogin from './header-login-icon'
 
 const Stack = createStackNavigator();
 
@@ -26,16 +27,10 @@ const App = () => {
         <Stack.Screen
           name="Home"
           component={HomeScreen}
-          options={({ navigation }) => ({
+          options={() => ({
             title: 'Create you next journey',
             headerRight: () => (
-              <TouchableOpacity
-                style={{ marginRight: 25 }}
-                onPress={() => navigation.navigate('LogIn')}
-              >
-                <Text><Icon name="user" size={30} color="white" />
-                </Text>
-              </TouchableOpacity>
+             <HederIconLogin/> 
             ),
             headerStyle: {
               backgroundColor: '#3D6DCC',
@@ -164,7 +159,6 @@ const App = () => {
     </Provider>
   );
 };
-
 
 
 export default App;
