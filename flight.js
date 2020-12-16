@@ -1,6 +1,7 @@
 import 'react-native-gesture-handler';
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { setCurrentTime } from './redux/action-time'
 import { View, StyleSheet, Text, ImageBackground, TouchableOpacity } from 'react-native';
 import Autocomplete from 'react-native-autocomplete-input';
 import { Button } from 'react-native-elements';
@@ -37,27 +38,27 @@ const styles = StyleSheet.create({
   },
   itemText: {
     fontSize: 15,
-    padding:8,
+    padding: 8,
     margin: 2,
     fontFamily: 'Architects Daughter Regular',
   },
-  textPicked:{
+  textPicked: {
     fontSize: 20,
     fontFamily: 'Architects Daughter Regular',
     marginBottom: 25,
     color: "#696969"
   },
-  inputAutocomplete:{
+  inputAutocomplete: {
     fontFamily: 'Architects Daughter Regular',
     fontSize: 20,
     padding: 10,
   },
-  containerList:{
+  containerList: {
     zIndex: 1000,
   },
 });
 
-const Flight = ({ currentDirection, currentLocation}) => {
+const Flight = ({ currentDirection, currentLocation, setCurrentTime }) => {
   const [lookingDataStart, setLookingDataStart] = useState();
   const [lookingDataEnd, setLookingDataEnd] = useState();
   const [startPoint, setStartPoint] = useState(null);
@@ -68,9 +69,9 @@ const Flight = ({ currentDirection, currentLocation}) => {
   const [showFinal, setShowFinal] = useState(false);
 
   useEffect(() => {
-    if(currentDirection && currentLocation){
+    if (currentDirection && currentLocation) {
       setStartPoint(currentLocation),
-      setEndPoint(currentDirection)
+        setEndPoint(currentDirection)
     }
   }, [])
 
@@ -118,6 +119,28 @@ const Flight = ({ currentDirection, currentLocation}) => {
     }
   }
 
+  const lookingForFlight = () => {
+    setCurrentTime({'start': dateStart, 'last': dateFinal})
+    fetch(`http://127.0.0.1:5000/flight/${startPoint.code}/${endPoint.code}/${dateStart}/${dateFinal}`, {
+      method: 'get',
+      headers: { 'Content-Type': 'application/json' }
+    })
+      .then(response => response.json())
+      .then(data => console.log(data))
+  }
+
+  const clean = () => {
+    setStartPoint(null);
+    setEndPoint(null);
+    setDateFinal(null);
+    setDateStart(null);
+    setLookingDataEnd();
+    setLookingDataStart();
+    setShowStart(false);
+    setShowFinal(false);
+    setCurrentTime(null)
+  }
+  
   return (
     <View>
       <ImageBackground source={require('./image/plane-background.jpg')} resizeMode='cover' style={styles.image}
@@ -126,28 +149,28 @@ const Flight = ({ currentDirection, currentLocation}) => {
         <View style={styles.inputBackground}>
           {!startPoint ?
             (<View style={styles.containerList}>
-            <Autocomplete
-              autoCapitalize="none"
-              autoCorrect={false}
-              containerStyle={styles.inputStyle}
-              style={styles.inputAutocomplete}
-              listStyle={styles.listStyle}
-              data={lookingDataStart}
-              onChangeText={text => lookingForCityStart(text)}
-              placeholder="From (city)"
-              renderItem={({ item, i }) => (
-                <TouchableOpacity onPress={() => setStartPoint({'code': item.iata_code, 'name': item.name, 'region': item.municipality})}>
-                  <Text style={styles.itemText}>
-                    {item.municipality} - {item.name}
-                  </Text>
-                </TouchableOpacity>
-              )}
-            /></View>)
+              <Autocomplete
+                autoCapitalize="none"
+                autoCorrect={false}
+                containerStyle={styles.inputStyle}
+                style={styles.inputAutocomplete}
+                listStyle={styles.listStyle}
+                data={lookingDataStart}
+                onChangeText={text => lookingForCityStart(text)}
+                placeholder="From (city)"
+                renderItem={({ item, i }) => (
+                  <TouchableOpacity onPress={() => setStartPoint({ 'code': item.iata_code, 'name': item.name, 'region': item.municipality })}>
+                    <Text style={styles.itemText}>
+                      {item.municipality} - {item.name}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              /></View>)
             :
             (<Text style={styles.textPicked}>
               Departure: {startPoint.name}  {startPoint.region}
             </Text>)}
-            {!endPoint ?
+          {!endPoint ?
             (<Autocomplete
               autoCapitalize="none"
               autoCorrect={false}
@@ -158,7 +181,7 @@ const Flight = ({ currentDirection, currentLocation}) => {
               onChangeText={text => lookingForCityEnd(text)}
               placeholder="To (city)"
               renderItem={({ item, i }) => (
-                <TouchableOpacity onPress={() => setEndPoint({'code': item.iata_code, 'name': item.name, 'region': item.municipality}) }>
+                <TouchableOpacity onPress={() => setEndPoint({ 'code': item.iata_code, 'name': item.name, 'region': item.municipality })}>
                   <Text style={styles.itemText}>
                     {item.municipality} - {item.name}
                   </Text>
@@ -180,7 +203,7 @@ const Flight = ({ currentDirection, currentLocation}) => {
                 }}
                 buttonStyle={{
                   borderRadius: 60,
-                  margin: 20,
+                  margin: 10,
                   padding: 5
                 }}
               />
@@ -205,7 +228,7 @@ const Flight = ({ currentDirection, currentLocation}) => {
                 }}
                 buttonStyle={{
                   borderRadius: 60,
-                  margin: 20,
+                  margin: 10,
                   padding: 5
                 }}
               />
@@ -221,6 +244,14 @@ const Flight = ({ currentDirection, currentLocation}) => {
               />
             )}
           </View>
+          <View style={{ flexDirection: 'row', marginTop: 30 }}>
+            <TouchableOpacity style={{ backgroundColor: '#3D6DCC', width: '50%', borderRadius: 7, marginRight: 10 }} onPress={() => lookingForFlight()}>
+              <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>Check</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={{ backgroundColor: '#3DCC6D', width: '50%', borderRadius: 7 }} onPress={() => clean()}>
+              <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>CLean</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ImageBackground>
     </View>
@@ -232,4 +263,10 @@ const mapStateToProps = state => ({
   currentDirection: state.direction.currentDirection
 });
 
-export default connect(mapStateToProps)(Flight);
+const mapDispatchToProps = dispatch => {
+  return {
+    setCurrentTime: time => dispatch(setCurrentTime(time))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Flight);

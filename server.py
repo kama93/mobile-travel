@@ -2,6 +2,7 @@ from flask import Flask
 import pandas as pd
 import numpy as np
 import requests
+import json
 from booking_scraper import bkscraper
 from flask import request, jsonify
 from flask_pymongo import PyMongo
@@ -97,16 +98,18 @@ def auto(looking):
     return jsonify(data.to_dict(orient="rows"))
 
 # proviging flight information
-@app.route("/flight", methods=["GET"])
-def get_flight():
-    url = "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browseroutes/v1.0/US/USD/en-US/UK-sky/PL-sky/2021-01-01"
-    querystring = {"inboundpartialdate": "2021-02-01"}
+@app.route("/flight/<origin>/<destination>/<fromDate>/<toDate>", methods=["GET"])
+def get_flight(origin, destination, fromDate, toDate):
+    fromDate = str(pd.Timestamp(fromDate).date())
+    toDate = str(pd.Timestamp(toDate).date())
+    url = f"https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browseroutes/v1.0/UK/GBP/en-UK/{origin}-sky/{destination}-sky/{fromDate}"
+    querystring = {'inboundpartialdate': toDate}
     headers = {
         "x-rapidapi-key": "0e37694060msh40b260e389769a4p1b32a8jsn17a6df3c674b",
         "x-rapidapi-host": "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
     }
     response = requests.request("GET", url, headers=headers, params=querystring)
-    return response.text
+    return response.content
 
 
 # providing safe info
