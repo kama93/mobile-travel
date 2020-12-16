@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { StyleSheet, View, Text, Dimensions, TouchableOpacity } from 'react-native';
@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Modal from 'react-native-modal';
 import { setCurrentLocation } from './redux/action-location';
 import { setCurrentDirection } from './redux/action';
+import { useNavigation } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
   container: {
@@ -28,16 +29,18 @@ const styles = StyleSheet.create({
 })
 
 const Map = ( { setCurrentLocation, setCurrentDirection } ) => {
-  // const navigation = useNavigation(); 
+
   const [coordinate, setCoordinate] = useState({});
   const [myPosition, setMyPosition] = useState({});
   const [visibleModal, setVisibleModal] = useState(false);
   const [from, setFrom] = useState([]);
   const [to, setTo] = useState([]);
-  const [startPoint, setStartPoint] = useState('');
-  const [endPoint, setEndPoint] = useState('');
+  const [startPoint, setStartPoint] = useState(null);
+  const [endPoint, setEndPoint] = useState(null);
 
   Geolocation.getCurrentPosition(info => setMyPosition(info));
+
+  const navigation = useRef(useNavigation());
 
   useEffect(() => {
     if (myPosition.coords && myPosition.coords.latitude && coordinate.latitude) {
@@ -64,7 +67,6 @@ const Map = ( { setCurrentLocation, setCurrentDirection } ) => {
 
   useEffect(() => {
     if (from[0]) {
-      console.log(from)
       setVisibleModal(true)
     }
   }, [from])
@@ -72,14 +74,15 @@ const Map = ( { setCurrentLocation, setCurrentDirection } ) => {
 
   const closeModal = () => {
     setVisibleModal(false);
-    setCurrentLocation(setStartPoint(''));
-    setCurrentDirection(setEndPoint(''));
+    setCurrentLocation(setStartPoint(null));
+    setCurrentDirection(setEndPoint(null));
   }
 
   const reduxAirports = () => {
-    console.log(startPoint, endPoint)
+    setVisibleModal(false);
     setCurrentLocation(startPoint)
     setCurrentDirection(endPoint)
+    navigation.current.navigate("Flight");
   }
 
 
@@ -100,15 +103,15 @@ const Map = ( { setCurrentLocation, setCurrentDirection } ) => {
         <View>
           <View style={{ padding: 15, marginBottom: 10, marginLeft: 40, marginTop: 20 }}>
             {startPoint ?
-              <View style={{ padding: 15, marginBottom: 10, marginLeft: 40 }}>
+              <View style={{ padding: 15, marginBottom: 5 }}>
                 <Text style={{ color: '#3D6DCC', padding: 5, fontSize: 25, fontFamily: 'Architects Daughter Regular' }}>Departure :</Text>
-                <Text style={{ color: 'black', padding: 8, fontFamily: 'Architects Daughter Regular', fontSize: 20 }}>{startPoint}</Text>
+                <Text style={{ color: 'black', padding: 8, fontFamily: 'Architects Daughter Regular', fontSize: 20 }}>{startPoint['code']} - {startPoint['name']}</Text>
               </View> :
               <View>
                 <Text style={{ color: '#3D6DCC', padding: 5, fontSize: 20, fontFamily: 'Architects Daughter Regular' }}>Choose starting airport</Text>
                 {
                   from.map(place =>
-                    <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => { setStartPoint(place['iata_code']) }}>
+                    <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => { setStartPoint({'code': place['iata_code'], 'name':place['name']}) }}>
                       <Icon name="plane" size={15} color="black" />
                       <Text style={{ color: 'black', padding: 8, fontFamily: 'Architects Daughter Regular', fontSize: 12 }}>{place['iata_code']} - {place['name']}</Text>
                     </TouchableOpacity>
@@ -118,15 +121,15 @@ const Map = ( { setCurrentLocation, setCurrentDirection } ) => {
           </View>
           <View style={{ padding: 15, marginBottom: 60, marginLeft: 40 }}>
           {endPoint ?
-              <View style={{ padding: 15, marginBottom: 60, marginLeft: 40 }}>
+              <View style={{ padding: 15, marginBottom: 60 }}>
                 <Text style={{ color: '#3D6DCC', padding: 5, fontSize: 25, fontFamily: 'Architects Daughter Regular' }}>Arrival :</Text>
-                <Text style={{ color: 'black', padding: 8, fontFamily: 'Architects Daughter Regular', fontSize: 20 }}>{endPoint}</Text>
+                <Text style={{ color: 'black', padding: 8, fontFamily: 'Architects Daughter Regular', fontSize: 20 }}>{endPoint['code']} - {endPoint['name']}</Text>
               </View> :
               <View>
             <Text style={{ color: '#3D6DCC', padding: 5, fontSize: 20, fontFamily: 'Architects Daughter Regular' }}>Choose destination airport</Text>
             {
               to.map(place =>
-                <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => { setEndPoint(place['iata_code']) }}>
+                <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => { setEndPoint({'code': place['iata_code'], 'name':place['name']}) }}>
                   <Icon name="plane" size={15} color="black" />
                   <Text style={{ color: 'black', padding: 8, fontFamily: 'Architects Daughter Regular', fontSize: 12 }}>{place['iata_code']} - {place['name']}</Text>
                 </TouchableOpacity>
