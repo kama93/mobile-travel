@@ -85,6 +85,16 @@ def geo(lat, lng):
     data = data[["latitude_deg", "longitude_deg", "iata_code", "name", "iso_country"]]
     return jsonify(data.to_dict(orient="rows"))
 
+# autocomplete aiport
+@app.route("/auto/<looking>", methods=["GET"])
+def auto(looking):
+    data = pd.read_csv("airports.csv")
+    data = data[
+        ["latitude_deg", "longitude_deg", "iata_code", "name", "iso_country", "municipality"]
+    ].dropna()
+    data = data[data['name'].str.contains(looking, case=False) | data['municipality'].str.contains(looking, case=False)]
+    data = data.head(7)
+    return jsonify(data.to_dict(orient="rows"))
 
 # proviging flight information
 @app.route("/flight", methods=["GET"])

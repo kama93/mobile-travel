@@ -75,13 +75,13 @@ const Flight = () => {
         <View style={styles.inputBackground}>
           <TextInput
             style={styles.inputStyle}
-            placeholder="From"
+            placeholder="From (city)"
             onChangeText={text => onChangeText(text)}
             value={value}
           />
           <TextInput
             style={styles.inputStyle}
-            placeholder="To"
+            placeholder="To (city)"
             onChangeText={text => onChangeText2(text)}
             value={value2}
           />
