@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { View, StyleSheet, Text, ImageBackground, TouchableOpacity } from 'react-native';
 import Autocomplete from 'react-native-autocomplete-input';
 import { Button } from 'react-native-elements';
@@ -56,16 +57,22 @@ const styles = StyleSheet.create({
   },
 });
 
-const Flight = () => {
+const Flight = ({ currentDirection, currentLocation}) => {
   const [lookingDataStart, setLookingDataStart] = useState();
   const [lookingDataEnd, setLookingDataEnd] = useState();
   const [startPoint, setStartPoint] = useState(null);
   const [endPoint, setEndPoint] = useState(null);
-  const [value2, onChangeText2] = React.useState();
   const [dateStart, setDateStart] = useState(new Date(1598051730000));
   const [dateFinal, setDateFinal] = useState(new Date(1598051730000));
   const [showStart, setShowStart] = useState(false);
   const [showFinal, setShowFinal] = useState(false);
+
+  useEffect(() => {
+    if(currentDirection && currentLocation){
+      setStartPoint(currentLocation),
+      setEndPoint(currentDirection)
+    }
+  }, [])
 
   const onChange1 = (event, selectedDate) => {
     const currentDate = selectedDate || dateStart;
@@ -126,7 +133,6 @@ const Flight = () => {
               style={styles.inputAutocomplete}
               listStyle={styles.listStyle}
               data={lookingDataStart}
-              // defaultValue={lookingData}
               onChangeText={text => lookingForCityStart(text)}
               placeholder="From (city)"
               renderItem={({ item, i }) => (
@@ -139,7 +145,7 @@ const Flight = () => {
             /></View>)
             :
             (<Text style={styles.textPicked}>
-              Departure: {startPoint.name} - {startPoint.region}
+              Departure: {startPoint.name}  {startPoint.region}
             </Text>)}
             {!endPoint ?
             (<Autocomplete
@@ -149,7 +155,6 @@ const Flight = () => {
               style={styles.inputAutocomplete}
               listStyle={styles.listStyle}
               data={lookingDataEnd}
-              // defaultValue={lookingData}
               onChangeText={text => lookingForCityEnd(text)}
               placeholder="To (city)"
               renderItem={({ item, i }) => (
@@ -162,7 +167,7 @@ const Flight = () => {
             />)
             :
             (<Text style={styles.textPicked}>
-              Arrival: {endPoint.name} - {endPoint.region}
+              Arrival: {endPoint.name}  {endPoint.region}
             </Text>)}
           <View style={styles.dateContainer}>
             <View style={styles.date}>
@@ -222,6 +227,9 @@ const Flight = () => {
   );
 };
 
+const mapStateToProps = state => ({
+  currentLocation: state.location.currentLocation,
+  currentDirection: state.direction.currentDirection
+});
 
-
-export default Flight;
+export default connect(mapStateToProps)(Flight);
