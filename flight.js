@@ -77,7 +77,7 @@ const Flight = ({ currentDirection, currentLocation, setCurrentTime, setCurrentL
   useEffect(() => {
     if (currentDirection && currentLocation) {
       setStartPoint(currentLocation),
-        setEndPoint(currentDirection)
+      setEndPoint(currentDirection)
     }
   }, [])
 
@@ -144,9 +144,11 @@ const Flight = ({ currentDirection, currentLocation, setCurrentTime, setCurrentL
           return response.json();
         }));
       })
-      .then(data => 
+      .then(data =>
         console.log(data)
-        )
+      )
+      setFlight(null);
+      setCurrentLocation(null);
   }
 
   const clean = () => {
@@ -160,7 +162,8 @@ const Flight = ({ currentDirection, currentLocation, setCurrentTime, setCurrentL
     setShowFinal(false);
     setCurrentTime(null)
     setCurrentLocation(null);
-    setCurrentDirection(null)
+    setCurrentDirection(null);
+    setFlight(null)
   }
 
   return (
