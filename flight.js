@@ -51,6 +51,13 @@ const styles = StyleSheet.create({
     marginBottom: 25,
     color: "#696969"
   },
+  textAfter: {
+    fontSize: 19,
+    fontFamily: 'Architects Daughter Regular',
+    marginTop: 15,
+    marginLeft:10,
+    color: "#3D6DCC"
+  },
   inputAutocomplete: {
     fontFamily: 'Architects Daughter Regular',
     fontSize: 20,
@@ -59,6 +66,17 @@ const styles = StyleSheet.create({
   containerList: {
     zIndex: 1000,
   },
+  textTitle: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    fontFamily: 'Architects Daughter Regular',
+    marginTop: 25,
+    marginLeft:10,
+    color: "#3D6DCC"
+  },
+  highlight: {
+    color: "#3DCC6D"
+  }
 });
 
 const Flight = ({ currentDirection, currentLocation, setCurrentTime, setCurrentLocation, setCurrentDirection }) => {
@@ -70,7 +88,8 @@ const Flight = ({ currentDirection, currentLocation, setCurrentTime, setCurrentL
   const [dateFinal, setDateFinal] = useState(new Date());
   const [showStart, setShowStart] = useState(false);
   const [showFinal, setShowFinal] = useState(false);
-  const [flight, setFlight] = useState(null)
+  const [flight, setFlight] = useState(null);
+  const [flightData, setFlightData] = useState();
 
   const navigation = useRef(useNavigation());
 
@@ -126,6 +145,7 @@ const Flight = ({ currentDirection, currentLocation, setCurrentTime, setCurrentL
   }
 
   const lookingForFlight = () => {
+    setFlight(1);
     setCurrentTime({ 'start': dateStart, 'last': dateFinal })
     setCurrentDirection(endPoint.name)
     setCurrentLocation(startPoint.name)
@@ -144,10 +164,11 @@ const Flight = ({ currentDirection, currentLocation, setCurrentTime, setCurrentL
           return response.json();
         }));
       })
-      .then(data =>
-        console.log(data)
+      .then(data =>{
+        console.log(data[0])
+        setFlightData(data)}
       )
-      setFlight(null);
+      setFlight(1);
       setCurrentLocation(null);
   }
 
@@ -172,7 +193,7 @@ const Flight = ({ currentDirection, currentLocation, setCurrentTime, setCurrentL
         imageStyle={{ opacity: 0.8 }}
       >
         {!flight ?
-          <View style={styles.inputBackground}>
+          (<View style={styles.inputBackground}>
             {!startPoint ?
               (<View style={styles.containerList}>
                 <Autocomplete
@@ -278,10 +299,38 @@ const Flight = ({ currentDirection, currentLocation, setCurrentTime, setCurrentL
                 <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>CLean</Text>
               </TouchableOpacity>
             </View>
-          </View>
+          </View>)
           :
-          <View>
-          </View>}
+          (<View>
+            <Text style={styles.textTitle}>The cheapest return flight is: </Text>
+            <Text style={styles.textAfter}>
+            To: {startPoint.name} - {endPoint.name} {"\n"}
+            <Text style={styles.highlight}>
+                {"\n"}
+                Departure: {"\n"}
+                Minimum price:{"\n"}
+                Company:{"\n"}
+                Direct:{"\n"}</Text>
+              </Text>
+              <Text style={styles.textAfter}>
+                Back: {endPoint.name} - {startPoint.name}{"\n"}
+                <Text style={styles.highlight}>
+                {"\n"}
+                Departure: {"\n"}
+                Minimum price:{"\n"}
+                Company:{"\n"}
+                Direct:{"\n"}
+                </Text>
+              </Text>
+            <View style={{ flexDirection: 'row', marginTop: 30 }}>
+              <TouchableOpacity style={{ backgroundColor: '#3D6DCC', width: '50%', borderRadius: 7, marginRight: 10 }} onPress={() => lookingForFlight()}>
+                <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>Check hotels</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={{ backgroundColor: '#3DCC6D', width: '50%', borderRadius: 7 }} onPress={() => clean()}>
+                <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>CLean</Text>
+              </TouchableOpacity>
+            </View>
+          </View>)}
       </ImageBackground>
     </View>
   );
