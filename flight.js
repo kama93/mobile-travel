@@ -134,7 +134,6 @@ const Flight = ({ currentDirection, currentLocation, setCurrentTime, setCurrentL
 
   const lookingForCityEnd = (text) => {
     if (text.length > 3) {
-      console.log(text)
       fetch(`http://127.0.0.1:5000/auto/${text}`, {
         method: 'get',
         headers: { 'Content-Type': 'application/json' }
@@ -296,7 +295,7 @@ const Flight = ({ currentDirection, currentLocation, setCurrentTime, setCurrentL
                 <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>Check</Text>
               </TouchableOpacity>
               <TouchableOpacity style={{ backgroundColor: '#3DCC6D', width: '50%', borderRadius: 7 }} onPress={() => clean()}>
-                <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>CLean</Text>
+                <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>Clean</Text>
               </TouchableOpacity>
             </View>
           </View>)

@@ -86,7 +86,7 @@ def geo(lat, lng):
     data = data[["latitude_deg", "longitude_deg", "iata_code", "name", "iso_country"]]
     return jsonify(data.to_dict(orient="rows"))
 
-# autocomplete aiport
+# autocomplete airport
 @app.route("/auto/<looking>", methods=["GET"])
 def auto(looking):
     data = pd.read_csv("airports.csv")
