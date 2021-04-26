@@ -109,6 +109,21 @@ def get_flight(origin, destination, fromDate):
     response = requests.request("GET", url, headers=headers)
     return response.content
 
+# booking.com scraping
+@app.route("/hotel", methods=["GET"])
+def scrape():
+    result = bkscraper.get_result(city="New York", limit=1, detail=False)
+    return jsonify(result)
+
+# attractions API
+@app.route("/attractions", methods=["GET"])
+def attractions():
+    # https://api.opentripmap.com/0.1/ru/places/bbox?lon_min=38.364285&lat_min=59.855685&lon_max=38.372809&lat_max=59.859052&format=geojson&apikey=5ae2e3f221c38a28845f05b6b5db6f06770f4edf010d553f8a337b76
+    apiKEY = '5ae2e3f221c38a28845f05b6b5db6f06770f4edf010d553f8a337b76'
+    url = "https://api.opentripmap.com/0.1/en­/places/Moscow&apikey=5ae2e3f221c38a28845f05b6b5db6f06770f4edf010d553f8a337b76"
+    response = requests.request("GET", url)
+    return response.content
+
 
 # providing safe info
 @app.route("/safe_info", methods=["GET"])
@@ -118,9 +133,3 @@ def get_safe_info():
     response = requests.request("GET", url, headers=headers)
     return response.text
 
-
-# booking.com scraping
-@app.route("/hotel", methods=["GET"])
-def scrape():
-    result = bkscraper.get_result(city="New York", limit=1, detail=False)
-    return jsonify(result)
