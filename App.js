@@ -10,9 +10,11 @@ import HomeScreen from './home-screen.js';
 import Map from './map-screen';
 import Flight from './flight';
 import Hotels from './hotels';
+import Attractions from './atractions';
 import LogIn from './login';
 import Registration from './registration'
 import HederIconLogin from './header-login-icon'
+
 
 const Stack = createStackNavigator();
 
@@ -97,6 +99,26 @@ const App = () => {
         <Stack.Screen
           name="Hotels"
           component={Hotels}
+          options={{
+            title: 'Choose dates and places',
+            headerStyle: {
+              backgroundColor: '#3D6DCC',
+              fontFamily: 'Architects Daughter Regular'
+            },
+            headerTintColor: '#fff',
+            headerBackTitleStyle: {
+              fontFamily: 'Architects Daughter Regular',
+              fontSize: 13
+            },
+            headerTitleStyle: {
+              fontWeight: 'bold',
+              fontFamily: 'Architects Daughter Regular'
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Attractions"
+          component={Attractions}
           options={{
             title: 'Choose dates and places',
             headerStyle: {

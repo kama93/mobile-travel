@@ -8,8 +8,6 @@ import { View, StyleSheet, Text, ImageBackground, TouchableOpacity } from 'react
 import Autocomplete from 'react-native-autocomplete-input';
 import { Button } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { useNavigation } from '@react-navigation/native';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 const styles = StyleSheet.create({
   image: {

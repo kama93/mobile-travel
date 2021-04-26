@@ -25,7 +25,7 @@ const HomeScreen = ({ navigation }) => {
           <Text style={styles.fullWidthButtonText}>Hotels</Text>
         </ImageBackground>
       </TouchableOpacity>
-      <TouchableOpacity style={[styles.fullWidthButton, styles.button1Background]} onPress={this.buttonPressed}>
+      <TouchableOpacity style={[styles.fullWidthButton, styles.button1Background]} onPress={() => navigation.navigate('Attractions')}>
         <ImageBackground source={require('./image/attractions.jpg')} style={styles.img}>
           <Text style={styles.fullWidthButtonText}>Attractions</Text>
         </ImageBackground>
