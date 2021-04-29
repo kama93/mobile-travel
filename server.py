@@ -10,6 +10,7 @@ from flask_bcrypt import Bcrypt, check_password_hash
 
 from selectorlib import Extractor
 from time import sleep
+from geopy.geocoders import Photon
 
 import reverse_geocoder as rg
 
@@ -118,9 +119,12 @@ def scrape():
 # attractions API
 @app.route("/attractions", methods=["GET"])
 def attractions():
-    # https://api.opentripmap.com/0.1/ru/places/bbox?lon_min=38.364285&lat_min=59.855685&lon_max=38.372809&lat_max=59.859052&format=geojson&apikey=5ae2e3f221c38a28845f05b6b5db6f06770f4edf010d553f8a337b76
+    geolocator = Photon(user_agent="MobileTravel")
+    location = geolocator.geocode("london uk")
+    lat = location.latitude
+    lon = location.longitude
     apiKEY = '5ae2e3f221c38a28845f05b6b5db6f06770f4edf010d553f8a337b76'
-    url = "https://api.opentripmap.com/0.1/en­/places/Moscow&apikey=5ae2e3f221c38a28845f05b6b5db6f06770f4edf010d553f8a337b76"
+    url = f"https://api.opentripmap.com/0.1/ru/places/bbox?lon_min={lon}&lat_min={lat}&lon_max={lon+0.05}&lat_max={lat+0.05}&format=geojson&apikey={apiKEY}"
     response = requests.request("GET", url)
     return response.content
 
@@ -132,4 +136,3 @@ def get_safe_info():
     headers = {"X-Auth-API-Key": "yz8mfd6q64efb4atr9kq5q2n"}
     response = requests.request("GET", url, headers=headers)
     return response.text
-

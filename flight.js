@@ -122,7 +122,6 @@ const Flight = ({ currentDirection, currentLocation, setCurrentTime, setCurrentL
 
   const lookingForCityStart = (text) => {
     if (text.length > 3) {
-      console.log(text)
       fetch(`http://127.0.0.1:5000/auto/${text}`, {
         method: 'get',
         headers: { 'Content-Type': 'application/json' }
@@ -164,7 +163,8 @@ const Flight = ({ currentDirection, currentLocation, setCurrentTime, setCurrentL
         }));
       })
       .then(data =>{
-        console.log(data[0])
+        let jsonData = JSON.stringify(data[0])
+        console.log(jsonData)
         setFlightData(data)}
       )
       setFlight(1);
