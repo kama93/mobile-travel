@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignSelf: 'center',
-    margin: 30,
+    margin: 80,
     shadowOffset: { width: 10, height: 10, },
     shadowColor: 'grey',
     shadowOpacity: 1.0,
@@ -79,40 +79,14 @@ const styles = StyleSheet.create({
 
 
 const Hotels = ({ currentDirection, currentLocation, setCurrentTime, setCurrentLocation, setCurrentDirection }) => {
-  const [lookingDataEnd, setLookingDataEnd] = useState();
   const [endPoint, setEndPoint] = useState(null);
-  const [dateStart, setDateStart] = useState(new Date());
-  const [dateFinal, setDateFinal] = useState(new Date());
-  const [showStart, setShowStart] = useState(false);
-  const [showFinal, setShowFinal] = useState(false);
   
   useEffect(() => {
     if (currentDirection && currentLocation) {
       setEndPoint(currentDirection)
     }
   }, [])
-
-  const onChange1 = (event, selectedDate) => {
-    const currentDate = selectedDate || dateStart;
-    setShowStart(Platform.OS === 'ios');
-    setDateStart(currentDate);
-  };
-
-  const onChange2 = (event, selectedDate) => {
-    const currentDate = selectedDate || dateFinal;
-    setShowFinal(Platform.OS === 'ios');
-    setDateFinal(currentDate);
-  };
-
-  const showModeStart = () => {
-    setShowStart(!showStart);
-  };
-
-  const showModeFinal = () => {
-    setShowFinal(!showFinal);
-  };
  
-
   const lookingForCityEnd = (text) => {
     if (text.length > 1) {
       fetch(`http://127.0.0.1:5000/auto/${text}`, {
@@ -129,18 +103,7 @@ const Hotels = ({ currentDirection, currentLocation, setCurrentTime, setCurrentL
 
 
   const clean = () => {
-    setStartPoint(null);
-    setEndPoint(null);
-    setDateFinal(null);
-    setDateStart(null);
-    setLookingDataEnd();
-    setLookingDataStart();
-    setShowStart(false);
-    setShowFinal(false);
-    setCurrentTime(null)
-    setCurrentLocation(null);
-    setCurrentDirection(null);
-    setFlight(null)
+    setEndPoint(null)
   }
 
   return (
@@ -150,80 +113,17 @@ const Hotels = ({ currentDirection, currentLocation, setCurrentTime, setCurrentL
       >
         <View style={styles.inputBackground}>
             {!endPoint ?
-              (<Autocomplete
-                autoCapitalize="none"
-                autoCorrect={false}
-                containerStyle={styles.inputStyle}
-                style={styles.inputAutocomplete}
-                listStyle={styles.listStyle}
-                data={lookingDataEnd}
-                onChangeText={text => lookingForCityEnd(text)}
-                placeholder="City"
-                renderItem={({ item, i }) => (
-                  <TouchableOpacity onPress={() => setEndPoint({ 'region': item.municipality })}>
+              (<TouchableOpacity 
+                // onPress={() =>  }
+                >
                     <Text style={styles.itemText}>
-                      {item.municipality} 
                     </Text>
-                  </TouchableOpacity>
-                )}
-              />
+              </TouchableOpacity>
               ):
               (<Text style={styles.textPicked}>
                 Arrival: {endPoint.name}  {endPoint.region}
               </Text>)}
-            <View style={styles.dateContainer}>
-              <View style={styles.date}>
-                <Button title="Start day!"
-                  onPress={showModeStart}
-                  titleStyle={{
-                    color: "white",
-                    fontSize: 16,
-                    fontFamily: 'Architects Daughter Regular'
-                  }}
-                  buttonStyle={{
-                    borderRadius: 60,
-                    margin: 10,
-                    padding: 5
-                  }}
-                />
-              </View>
-              {showStart && (
-                <DateTimePicker
-                  testID="dateTimePicker"
-                  value={dateStart}
-                  mode='date'
-                  display="spinner"
-                  onChange={onChange1}
-                  style={{ backgroundColor: 'rgba(277, 277, 277, 0.9)' }}
-                />
-              )}
-              <View style={styles.date2}>
-                <Button title="Last day!"
-                  onPress={showModeFinal}
-                  titleStyle={{
-                    color: "white",
-                    fontSize: 16,
-                    fontFamily: 'Architects Daughter Regular'
-                  }}
-                  buttonStyle={{
-                    borderRadius: 60,
-                    margin: 10,
-                    padding: 5
-                  }}
-                />
-              </View>
-              {showFinal && (
-                <DateTimePicker
-                  testID="dateTimePicker"
-                  value={dateFinal}
-                  mode='date'
-                  display="spinner"
-                  onChange={onChange2}
-                  style={{ backgroundColor: 'rgba(277, 277, 277, 0.9)' }}
-                />
-              )}
-            </View>
-            <View style={{ flexDirection: 'row', marginTop: 30 }}>
+        <View style={{ flexDirection: 'row', marginTop: 30 }}>
               <TouchableOpacity style={{ backgroundColor: '#3D6DCC', width: '50%', borderRadius: 7, marginRight: 10 }} onPress={() => lookingForFlight()}>
                 <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>Check</Text>
               </TouchableOpacity>

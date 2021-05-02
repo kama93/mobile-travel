@@ -34,6 +34,7 @@ const Attractions = () => {
       <ImageBackground source={require('./image/atractionsIn.jpg')} resizeMode='cover' style={styles.image}
         imageStyle={{ opacity: 0.5 }}
       >
+        
       </ImageBackground>
     </View>
   );
