@@ -49,29 +49,29 @@ const styles = StyleSheet.create({
 
 
 const Hotels = ({currentDirection, setCurrentDirection}) => {
-  const [endPoint, setEndPoint] = useState(null);
+  const [city, setCity] = useState('');
 
-  useEffect(() => {
-    if (currentDirection && currentLocation) {
-      setEndPoint(currentDirection)
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (currentDirection && currentLocation) {
+  //     setEndPoint(currentDirection)
+  //   }
+  // }, [])
 
-  const lookingForHotel = (text) => {
-    if (text.length > 1) {
-      fetch(
-          `http://127.0.0.1:5000/auto/${text}`,
-          {method: 'get', headers: {'Content-Type': 'application/json'}})
-          .then(response => response.json())
-          .then(
-              data =>
-                  // setLookingDataEnd(data)
-              console.log(data))
-    }
+  const lookingForHotel = () => {
+    fetch(
+        `http://127.0.0.1:5000/hotel/${city}`,
+        {method: 'get', headers: {'Content-Type': 'application/json'}})
+        .then(response => response.json())
+        .then(
+            data =>
+                // setLookingDataEnd(data)
+            console.log(data))
   }
 
   const clean = () => {
-    setEndPoint(null)
+    setEndPoint(null);
+    setCountry('');
+    setCity('')
   }
 
   return (
@@ -79,23 +79,8 @@ const Hotels = ({currentDirection, setCurrentDirection}) => {
       <ImageBackground source={require('./image/hotels.png')} resizeMode='cover' style={styles.image} imageStyle={{opacity: 0.8 }}>
         <View style={styles.inputBackground}>
         <View style={styles.containerList}>
-            <TouchableOpacity style={styles.inputStyle}
-            
-                // onPress={() =>  }
-            >
-              <TextInput style={styles.itemText} placeholder="Country">
-              
-              </TextInput>
-            </TouchableOpacity>
-        </View>
-        <View style={styles.containerList}>
-            <TouchableOpacity style={styles.inputStyle}
-            
-                // onPress={() =>  }
-            >
-              <TextInput style={styles.itemText} placeholder="City">
-              
-              </TextInput>
+            <TouchableOpacity style={styles.inputStyle}>
+              <TextInput style={styles.itemText} placeholder="City" onChangeText={setCity}></TextInput>
             </TouchableOpacity>
         </View>
           <View style={{flexDirection: 'row', marginTop: 30 }}>

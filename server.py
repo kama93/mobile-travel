@@ -131,7 +131,7 @@ def attractions():
     apiKEY = '5ae2e3f221c38a28845f05b6b5db6f06770f4edf010d553f8a337b76'
     url = f"https://api.opentripmap.com/0.1/ru/places/bbox?lon_min={coordinates[1]}&lat_min={coordinates[0]}&lon_max={coordinates[1]+0.05}&lat_max={coordinates[0]+0.05}&format=geojson&apikey={apiKEY}"
     response = requests.request("GET", url)
-    return response.content
+    return response
 
 
 # providing safe info
