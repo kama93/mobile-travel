@@ -1,8 +1,9 @@
 import 'react-native-gesture-handler';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View, Image} from 'react-native';
+import { ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from 'react-native';
 import { connect } from 'react-redux';
+import { FlatList } from "react-native-bidirectional-infinite-scroll";
 
 import { setCurrentDirection } from './redux/action';
 import { setCurrentLocation } from './redux/action-location';
@@ -44,8 +45,8 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     zIndex: 1000,
-    padding:10,
-    marginBottom:22,
+    padding: 10,
+    marginBottom: 22,
     marginLeft: -20
   },
 });
@@ -53,13 +54,33 @@ const styles = StyleSheet.create({
 
 const Hotels = ({ currentDirection, setCurrentDirection }) => {
   const [city, setCity] = useState('');
-  const [hotelInfo, setHotelInfo] = useState('');
+  const [hotelInfo, setHotelInfo] = useState(null);
+  const [smallArrayInfo, setSmallArrayInfo] = useState([])
+
+  let currentArrayInd = 0
 
   // useEffect(() => {
   //   if (currentDirection && currentLocation) {
   //     setEndPoint(currentDirection)
   //   }
   // }, [])
+
+   useEffect(() => {
+     if(hotelInfo){
+      getFiveResults()
+     }
+  }, [hotelInfo])
+
+  const getFiveResults = () => {
+    let result = []
+    for (let i = currentArrayInd; i < (currentArrayInd + 5); i++) {
+      let ind = currentArrayInd + i + 1
+      hotelInfo[i].id = ind
+      result.push(hotelInfo[i])
+      setSmallArrayInfo(result)
+    }
+    currentArrayInd+=5
+  }
 
   const lookingForHotel =
     () => {
@@ -68,9 +89,8 @@ const Hotels = ({ currentDirection, setCurrentDirection }) => {
         { method: 'get', headers: { 'Content-Type': 'application/json' } })
         .then(response => response.json())
         .then(
-          data =>{
+          data => {
             setHotelInfo(data[0])
-            console.log(data[0][0].thumbnail_image)
           })
     }
 
@@ -92,16 +112,22 @@ const Hotels = ({ currentDirection, setCurrentDirection }) => {
                   </TextInput>
                 </TouchableOpacity>
               </View>
-              <View style={{marginTop: 30, justifyContent: 'center', alignItems: 'center' }}>
-                <TouchableOpacity style={{ backgroundColor: '#3D6DCC', width: 270,  borderRadius: 7, marginRight: 10 }} onPress={() => lookingForHotel()}>
+              <View style={{ marginTop: 30, justifyContent: 'center', alignItems: 'center' }}>
+                <TouchableOpacity style={{ backgroundColor: '#3D6DCC', width: 270, borderRadius: 7, marginRight: 10 }} onPress={() => lookingForHotel()}>
                   <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>Check</Text>
                 </TouchableOpacity>
               </View>
             </View>) :
-            (<View style={{marginTop: -50}}>
-              {hotelInfo.map((x)=>
-              <Image style={styles.hotelPhoto} source={{uri: x.thumbnail_image}}/>)}
-              <View style={{marginTop: 30 , justifyContent: 'center', alignItems: 'center' }}>
+            (<View style={{ marginTop: -50 }}>
+              <FlatList
+                data={smallArrayInfo}
+                keyExtractor={item => item.id}
+                renderItem={({ item }) => (<Image style={styles.hotelPhoto} source={{ uri: item.thumbnail_image }} />)}
+                onEndReached={() => getFiveResults}
+              />
+              {/* {hotelInfo.map((x) =>
+                <Image style={styles.hotelPhoto} source={{ uri: x.thumbnail_image }} />)} */}
+              <View style={{ marginTop: 30, justifyContent: 'center', alignItems: 'center' }}>
                 <TouchableOpacity style={{ backgroundColor: '#3DCC6D', width: 270, borderRadius: 7 }} onPress={() => clean()}>
                   <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>Clean</Text>
                 </TouchableOpacity>
