@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View, Image} from 'react-native';
 import { connect } from 'react-redux';
 
 import { setCurrentDirection } from './redux/action';
@@ -40,6 +40,14 @@ const styles = StyleSheet.create({
     fontFamily: 'Architects Daughter Regular',
     textAlign: 'center'
   },
+  hotelPhoto: {
+    width: 120,
+    height: 120,
+    zIndex: 1000,
+    padding:10,
+    marginBottom:22,
+    marginLeft: -20
+  },
 });
 
 
@@ -61,15 +69,15 @@ const Hotels = ({ currentDirection, setCurrentDirection }) => {
         .then(response => response.json())
         .then(
           data =>{
-            console.log(data)
-            setHotelInfo(data)
+            setHotelInfo(data[0])
+            console.log(data[0][0].thumbnail_image)
           })
     }
 
   const clean =
     () => {
-      setEndPoint(null);
-      setCountry(null);
+      setHotelInfo(null);
+      setCity(null);
     }
 
   return (
@@ -90,7 +98,9 @@ const Hotels = ({ currentDirection, setCurrentDirection }) => {
                 </TouchableOpacity>
               </View>
             </View>) :
-            (<View>
+            (<View style={{marginTop: -50}}>
+              {hotelInfo.map((x)=>
+              <Image style={styles.hotelPhoto} source={{uri: x.thumbnail_image}}/>)}
               <View style={{marginTop: 30 , justifyContent: 'center', alignItems: 'center' }}>
                 <TouchableOpacity style={{ backgroundColor: '#3DCC6D', width: 270, borderRadius: 7 }} onPress={() => clean()}>
                   <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>Clean</Text>
