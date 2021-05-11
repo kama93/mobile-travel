@@ -1,12 +1,14 @@
 import 'react-native-gesture-handler';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View, Image, ScrollView } from 'react-native';
+import { ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View, Image, ScrollView, Dimensions  } from 'react-native';
 import { connect } from 'react-redux';
 
 import { setCurrentDirection } from './redux/action';
 import { setCurrentLocation } from './redux/action-location';
 import { setCurrentTime } from './redux/action-time';
+
+const screenWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   image: { height: '100%', width: '100%', position: 'relative', top: 0, left: 0 },
@@ -32,6 +34,7 @@ const styles = StyleSheet.create({
     width: 350,
     marginBottom: 15,
     borderRadius: 10,
+    marginTop: 80
   },
   itemText: {
     fontSize: 15,
@@ -41,12 +44,12 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   hotelPhoto: {
-    width: 120,
-    height: 120,
+    width: 130,
+    height: 130,
     zIndex: 1000,
     padding: 10,
     marginBottom: 22,
-    marginLeft: -20
+    marginLeft: 10
   },
 });
 
@@ -97,7 +100,7 @@ const Hotels = ({ currentDirection, setCurrentDirection }) => {
                 </TouchableOpacity>
               </View>
             </View>) :
-            (<ScrollView style={{ width:'100%', height:'100%' }}>
+            (<ScrollView style={{ width: screenWidth }}>
               {hotelInfo.map((x) =>
                 <Image style={styles.hotelPhoto} source={{ uri: x.thumbnail_image }} />)}
               <View style={{ marginTop: 30, justifyContent: 'center', alignItems: 'center' }}>
