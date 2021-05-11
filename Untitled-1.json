@@ -1,0 +1,69 @@
+{
+    "Quotes": [
+        {
+            "QuoteId": 1,
+            "MinPrice": 244,
+            "Direct": false,
+            "OutboundLeg": {
+                "CarrierIds": [
+                    1878
+                ],
+                "OriginId": 66270,
+                "DestinationId": 90711,
+                "DepartureDate": "2021-04-29T00:00:00"
+            },
+            "QuoteDateTime": "2021-04-28T18:34:00"
+        }
+    ],
+    "Carriers": [
+        {
+            "CarrierId": 1878,
+            "Name": "Wizz Air"
+        }
+    ],
+    "Places": [
+        {
+            "Name": "London Luton",
+            "Type": "Station",
+            "PlaceId": 66270,
+            "IataCode": "LTN",
+            "SkyscannerCode": "LTN",
+            "CityName": "London",
+            "CityId": "LOND",
+            "CountryName": "United Kingdom"
+        },
+        {
+            "Name": "Warsaw Chopin",
+            "Type": "Station",
+            "PlaceId": 90711,
+            "IataCode": "WAW",
+            "SkyscannerCode": "WAW",
+            "CityName": "Warsaw",
+            "CityId": "WARS",
+            "CountryName": "Poland"
+        }
+    ],
+    "Currencies": [
+        {
+            "Code": "GBP",
+            "Symbol": "£",
+            "ThousandsSeparator": ",",
+            "DecimalSeparator": ".",
+            "SymbolOnLeft": true,
+            "SpaceBetweenAmountAndSymbol": false,
+            "RoundingCoefficient": 0,
+            "DecimalDigits": 2
+        }
+    ],
+    "Routes": [
+        {
+            "Price": 244,
+            "QuoteDateTime": "2021-04-28T18:34:00",
+            "OriginId": 66270,
+            "DestinationId": 90711,
+            "QuoteIds": [
+                1
+            ]
+        }
+    ]
+}
