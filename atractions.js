@@ -45,7 +45,7 @@ const Attractions = () => {
             </TouchableOpacity>
         </View>
           <View style={{flexDirection: 'row', marginTop: 30 }}>
-            <TouchableOpacity style={{ backgroundColor: '#3D6DCC', width: '50%', borderRadius: 7, marginRight: 10}} onPress={() => lookingForHotel()}>
+            <TouchableOpacity style={{ backgroundColor: '#3D6DCC', width: '50%', borderRadius: 7, marginRight: 10}} onPress={() => lookingForAttractions()}>
               <Text style={{color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>Check</Text>
             </TouchableOpacity>
             <TouchableOpacity style={{ backgroundColor: '#3DCC6D', width: '50%', borderRadius: 7 }} onPress={() => clean()}>
