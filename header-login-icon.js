@@ -23,15 +23,12 @@ const HederIconLogin = ({ currentUser, setCurrentUser }) => {
             {!currentUser ?
                 (<TouchableOpacity
                     style={{ marginRight: 25 }}
-                    onPress={() => navigation.current.navigate('LogIn')}
-                >
-                    <Text> <Icon name="user" size={30} color="white" />
+                    onPress={() => navigation.current.navigate('LogIn')}>
+                    <Text>
+                        <Icon name="user" size={30} color="white" />
                     </Text>
                 </TouchableOpacity>) :
-                (<TouchableOpacity
-                    style={{ marginRight: 20 }}
-                    onPress={() => logOut()}
-                >
+                (<TouchableOpacity style={{ marginRight: 20 }} onPress={() => logOut()}>
                     <Text style={{ color: "white", fontFamily: 'Architects Daughter Regular' }}>Log Out</Text>
                 </TouchableOpacity>)}
         </View>

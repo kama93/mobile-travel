@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View, Image, ScrollView, Dimensions, Button, Linking } from 'react-native';
+import { ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View, Image, ScrollView, Dimensions, Linking } from 'react-native';
 import { connect } from 'react-redux';
 
 import { setCurrentDirection } from './redux/action';
@@ -91,17 +91,16 @@ const Hotels = ({ currentDirection, setCurrentDirection }) => {
   //   }
   // }, [])
 
-  const lookingForHotel =
-    () => {
-      fetch(
-        `http://127.0.0.1:5000/hotel/${city}`,
-        { method: 'get', headers: { 'Content-Type': 'application/json' } })
-        .then(response => response.json())
-        .then(
-          data => {
-            setHotelInfo(data[0])
-          })
-    }
+  const lookingForHotel = () => {
+    fetch(
+      `http://127.0.0.1:5000/hotel/${city}`,
+      { method: 'get', headers: { 'Content-Type': 'application/json' } })
+      .then(response => response.json())
+      .then(
+        data => {
+          setHotelInfo(data[0])
+        })
+  }
 
   const handlePress = (url) => {
     let fullUrl = `https://www.booking.com${url}`

@@ -1,8 +1,9 @@
 import 'react-native-gesture-handler';
 import React, { useState, useRef } from 'react';
-import { View, StyleSheet, TextInput, ImageBackground, TouchableOpacity, Text, ScrollView } from 'react-native';
-import { Button } from 'react-native-elements';
-import { useNavigation } from '@react-navigation/native';
+import { View, StyleSheet, TextInput, ImageBackground, TouchableOpacity, Text, ScrollView, Dimensions } from 'react-native';
+
+const screenWidth = Dimensions.get('window').width;
+
 
 const styles = StyleSheet.create({
   image: {
@@ -41,7 +42,7 @@ const styles = StyleSheet.create({
     padding: 8,
     margin: 2,
     fontFamily: 'Architects Daughter Regular',
-    textAlign: 'center',
+    textAlign: 'center'
   },
   hotelPhoto: {
     width: 130,
@@ -74,18 +75,33 @@ const styles = StyleSheet.create({
   }
 });
 
-
 const Attractions = () => {
   const [country, setCountry] = useState('');
   const [city, setCity] = useState('');
-  const [atractionsInfo, setAtractionsInfo] = useState('')
+  const [atractionsInfo, setAtractionsInfo] = useState(null)
 
-  
+  const lookingForAttractions = () => {
+    fetch(`http://127.0.0.1:5000/attractions/${city}/${country}`, {
+      method: 'get',
+      headers: { 'Content-Type': 'application/json' }
+    })
+      .then(response => response.json())
+      .then(data => {
+        setAtractionsInfo(data)
+      })
+  }
+
+  const clean = () => {
+    setAtractionsInfo(null)
+    setCity('')
+    setCountry('')
+  }
+
   return (
     <View>
       <ImageBackground source={require('./image/atractionsIn.jpg')} resizeMode='cover' style={styles.image} imageStyle={{ opacity: 0.2 }}>
-      <View style={styles.inputBackground}>
-      {!atractionsInfo ?
+        <View style={styles.inputBackground}>
+          {!atractionsInfo ?
             (<View>
               <View style={styles.containerList}>
                 <TouchableOpacity style={styles.inputStyle}>
@@ -98,16 +114,16 @@ const Attractions = () => {
                 </TouchableOpacity>
               </View>
               <View style={{ marginTop: 30, justifyContent: 'center', alignItems: 'center' }}>
-                <TouchableOpacity style={{ backgroundColor: '#3D6DCC', width: 270, borderRadius: 7, marginRight: 10 }} onPress={() => lookingForHotel()}>
+                <TouchableOpacity style={{ backgroundColor: '#3D6DCC', width: 270, borderRadius: 7, marginRight: 10 }} onPress={() => lookingForAttractions()}>
                   <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>Check</Text>
                 </TouchableOpacity>
               </View>
             </View>) :
             (<ScrollView style={{ width: screenWidth }}>
-              {hotelInfo.map((x) =>
+              {/* {hotelInfo.map((x) =>
                 <View style={styles.hotelResultContainer}>
                   {/* <Image style={styles.hotelPhoto} source={{  }} /> */}
-                  <View style={styles.hotelResultInfo}>
+              {/* <View style={styles.hotelResultInfo}>
                     <Text style={styles.hotelResultText}></Text>
                     <Text style={styles.hotelResultText}>Minimum price:</Text>
                     <Text style={styles.hotelResultText}>Score:</Text>
@@ -116,7 +132,7 @@ const Attractions = () => {
                     </TouchableOpacity>
                   </View>
                 </View>
-              )}
+              )} */} */}
               <View style={{ marginTop: 30, justifyContent: 'center', alignItems: 'center' }}>
                 <TouchableOpacity style={{ backgroundColor: '#3DCC6D', width: 270, borderRadius: 7 }} onPress={() => clean()}>
                   <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>Clean</Text>
