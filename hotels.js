@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View, Image, ScrollView, Dimensions  } from 'react-native';
+import { ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View, Image, ScrollView, Dimensions, Button, Linking } from 'react-native';
 import { connect } from 'react-redux';
 
 import { setCurrentDirection } from './redux/action';
@@ -11,7 +11,13 @@ import { setCurrentTime } from './redux/action-time';
 const screenWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
-  image: { height: '100%', width: '100%', position: 'relative', top: 0, left: 0 },
+  image: {
+    height: '100%',
+    width: '100%',
+    position: 'relative',
+    top: 0,
+    left: 0
+  },
   inputBackground: {
     flex: 1,
     flexDirection: 'column',
@@ -21,7 +27,7 @@ const styles = StyleSheet.create({
       width: 10,
       height: 10,
     },
-    shadowColor: 'grey',
+    shadowColor: '#B7BDC6',
     shadowOpacity: 1.0,
   },
   containerList: {
@@ -29,7 +35,7 @@ const styles = StyleSheet.create({
   },
   inputStyle: {
     height: 50,
-    borderColor: 'grey',
+    borderColor: '#B7BDC6',
     borderWidth: 2,
     width: 350,
     marginBottom: 15,
@@ -51,6 +57,27 @@ const styles = StyleSheet.create({
     marginBottom: 22,
     marginLeft: 10
   },
+  hotelResultContainer: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  hotelResultInfo: {
+    marginLeft: 15,
+  },
+  hotelResultText: {
+    fontFamily: 'Architects Daughter Regular',
+    fontSize: 18,
+  },
+  hotelResultButton: {
+    marginTop: 10,
+    alignItems: "center",
+    backgroundColor: "#E5ECF8",
+    padding: 8,
+    borderRadius: 3,
+  },
+  hotelResultButtonText: {
+    fontFamily: 'Architects Daughter Regular',
+  }
 });
 
 
@@ -76,6 +103,11 @@ const Hotels = ({ currentDirection, setCurrentDirection }) => {
           })
     }
 
+  const handlePress = (url) => {
+    let fullUrl = `https://www.booking.com${url}`
+    Linking.openURL(fullUrl);
+  }
+
   const clean =
     () => {
       setHotelInfo(null);
@@ -84,7 +116,7 @@ const Hotels = ({ currentDirection, setCurrentDirection }) => {
 
   return (
     <View>
-      <ImageBackground source={require('./image/hotels.png')} resizeMode='cover' style={styles.image} imageStyle={{ opacity: 0.8 }}>
+      <ImageBackground source={require('./image/hotels.png')} resizeMode='cover' style={styles.image} imageStyle={{ opacity: 0.2 }}>
         <View style={styles.inputBackground}>
           {!hotelInfo ?
             (<View>
@@ -102,7 +134,18 @@ const Hotels = ({ currentDirection, setCurrentDirection }) => {
             </View>) :
             (<ScrollView style={{ width: screenWidth }}>
               {hotelInfo.map((x) =>
-                <Image style={styles.hotelPhoto} source={{ uri: x.thumbnail_image }} />)}
+                <View style={styles.hotelResultContainer}>
+                  <Image style={styles.hotelPhoto} source={{ uri: x.thumbnail_image }} />
+                  <View style={styles.hotelResultInfo}>
+                    <Text style={styles.hotelResultText}>{x.name}</Text>
+                    <Text style={styles.hotelResultText}>Minimum price: ‎£{x.price}</Text>
+                    <Text style={styles.hotelResultText}>Score: {x.score}</Text>
+                    <TouchableOpacity style={styles.hotelResultButton} onPress={() => handlePress(x.link)}>
+                      <Text style={styles.hotelResultButtonText}>Check on booking.com</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              )}
               <View style={{ marginTop: 30, justifyContent: 'center', alignItems: 'center' }}>
                 <TouchableOpacity style={{ backgroundColor: '#3DCC6D', width: 270, borderRadius: 7 }} onPress={() => clean()}>
                   <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>Clean</Text>
