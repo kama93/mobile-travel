@@ -178,7 +178,7 @@ const App = () => {
             name="SecondMenu"
             component={SecondMenu}
             options={{
-              title: 'SecondMenu',
+              title: 'Press one of below',
               headerStyle: {
                 backgroundColor: '#3D6DCC',
                 fontFamily: 'Architects Daughter Regular'
