@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useState, useRef } from 'react';
-import { View, StyleSheet, TextInput, ImageBackground, TouchableOpacity, Text, ScrollView, Dimensions } from 'react-native';
+import { View, StyleSheet, TextInput, ImageBackground, TouchableOpacity, Text, ScrollView, Dimensions, Modal, Pressable} from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 
 const screenWidth = Dimensions.get('window').width;
@@ -73,7 +73,39 @@ const styles = StyleSheet.create({
   },
   hotelResultButtonText: {
     fontFamily: 'Architects Daughter Regular',
-  }
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
 });
 
 const Attractions = () => {
@@ -81,6 +113,7 @@ const Attractions = () => {
   const [city, setCity] = useState('');
   const [attractionsInfo, setAttractionsInfo] = useState(null);
   const [myPosition, setMyPosition] = useState({});
+  const [modalVisible, setModalVisible] = useState(false);
 
   Geolocation.getCurrentPosition(info => setMyPosition(info));
 
@@ -144,8 +177,28 @@ const Attractions = () => {
                 <TouchableOpacity style={{ backgroundColor: '#3DCC6D', width: 270, borderRadius: 7, marginBottom: 10 }} onPress={() => clean()}>
                   <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>Clean</Text>
                 </TouchableOpacity>
+                <Modal
+                  animationType="slide"
+                  transparent={true}
+                  visible={modalVisible}
+                  onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+                    setModalVisible(!modalVisible);
+                  }}
+                >
+                <View style={styles.modalView}>
+                <View style={styles.centeredView}>
+                <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={styles.textStyle}>Hide Modal</Text>
+            </Pressable>
+                </View>
+                </View>
+                </Modal>
                 {attractionsInfo && attractionsInfo.features.map((x) =>
-                  <TouchableOpacity style={{ backgroundColor: '#d1ddf3', width: screenWidth, borderRadius: 3, padding: 5, marginTop: 10 }} onPress={() => checkWikiData()}>
+                  <TouchableOpacity style={{ backgroundColor: '#d1ddf3', width: screenWidth, borderRadius: 3, padding: 5, marginTop: 10 }} onPress={() => setModalVisible(!modalVisible)}>
                     <Text style={{ color: 'black', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>-{x.properties.name}-</Text>
                   </TouchableOpacity>
                 )}
