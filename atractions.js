@@ -1,6 +1,7 @@
 import 'react-native-gesture-handler';
 import React, { useState, useRef } from 'react';
 import { View, StyleSheet, TextInput, ImageBackground, TouchableOpacity, Text, ScrollView, Dimensions } from 'react-native';
+import Geolocation from '@react-native-community/geolocation';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -78,7 +79,10 @@ const styles = StyleSheet.create({
 const Attractions = () => {
   const [country, setCountry] = useState('');
   const [city, setCity] = useState('');
-  const [atractionsInfo, setAtractionsInfo] = useState(null)
+  const [attractionsInfo, setAttractionsInfo] = useState(null);
+  const [myPosition, setMyPosition] = useState({});
+
+  Geolocation.getCurrentPosition(info => setMyPosition(info));
 
   const lookingForAttractions = () => {
     fetch(`http://127.0.0.1:5000/attractions/${city}/${country}`, {
@@ -87,12 +91,27 @@ const Attractions = () => {
     })
       .then(response => response.json())
       .then(data => {
-        setAtractionsInfo(data)
+        setAttractionsInfo(data)
       })
   }
 
+  const fetchAttractionsWithCurrentPosition = () => {
+    console.log(myPosition)
+    if (myPosition.coords && myPosition.coords.latitude && myPosition.coords.longitude) {
+      fetch(`http://127.0.0.1:5000/attractionsCoordinates/${myPosition.coords.latitude}/${myPosition.coords.longitude}`, {
+        method: 'get',
+        headers: { 'Content-Type': 'application/json' }
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data)
+          setAttractionsInfo(data)
+        })
+    }
+  }
+
   const clean = () => {
-    setAtractionsInfo(null)
+    setAttractionsInfo(null)
     setCity('')
     setCountry('')
   }
@@ -101,42 +120,35 @@ const Attractions = () => {
     <View>
       <ImageBackground source={require('./image/atractionsIn.jpg')} resizeMode='cover' style={styles.image} imageStyle={{ opacity: 0.2 }}>
         <View style={styles.inputBackground}>
-          {!atractionsInfo ?
+          {!attractionsInfo ?
             (<View>
               <View style={styles.containerList}>
                 <TouchableOpacity style={styles.inputStyle}>
-                  <TextInput style={styles.itemText} placeholder='City' onChangeText={setCity}>
-                  </TextInput>
+                  <TextInput style={styles.itemText} placeholder='City' onChangeText={setCity}></TextInput>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.inputStyle}>
-                  <TextInput style={styles.itemText} placeholder='Country' onChangeText={setCountry}>
-                  </TextInput>
+                  <TextInput style={styles.itemText} placeholder='Country' onChangeText={setCountry}></TextInput>
                 </TouchableOpacity>
               </View>
               <View style={{ marginTop: 30, justifyContent: 'center', alignItems: 'center' }}>
-                <TouchableOpacity style={{ backgroundColor: '#3D6DCC', width: 270, borderRadius: 7, marginRight: 10 }} onPress={() => lookingForAttractions()}>
+                <TouchableOpacity style={{ backgroundColor: '#3DCC6D', width: 280, borderRadius: 7, marginBottom: 10 }} onPress={() => fetchAttractionsWithCurrentPosition()}>
+                  <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>Get current position</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={{ backgroundColor: '#3D6DCC', width: 280, borderRadius: 7, marginRight: 10 }} onPress={() => lookingForAttractions()}>
                   <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>Check</Text>
                 </TouchableOpacity>
               </View>
             </View>) :
             (<ScrollView style={{ width: screenWidth }}>
-              {/* {hotelInfo.map((x) =>
-                <View style={styles.hotelResultContainer}>
-                  {/* <Image style={styles.hotelPhoto} source={{  }} /> */}
-              {/* <View style={styles.hotelResultInfo}>
-                    <Text style={styles.hotelResultText}></Text>
-                    <Text style={styles.hotelResultText}>Minimum price:</Text>
-                    <Text style={styles.hotelResultText}>Score:</Text>
-                    <TouchableOpacity style={styles.hotelResultButton} onPress={() => handlePress()}>
-                      <Text style={styles.hotelResultButtonText}>Check on booking.com</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              )} */} */}
               <View style={{ marginTop: 30, justifyContent: 'center', alignItems: 'center' }}>
-                <TouchableOpacity style={{ backgroundColor: '#3DCC6D', width: 270, borderRadius: 7 }} onPress={() => clean()}>
+                <TouchableOpacity style={{ backgroundColor: '#3DCC6D', width: 270, borderRadius: 7, marginBottom: 10 }} onPress={() => clean()}>
                   <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>Clean</Text>
                 </TouchableOpacity>
+                {attractionsInfo && attractionsInfo.features.map((x) =>
+                  <TouchableOpacity style={{ backgroundColor: '#d1ddf3', width: screenWidth, borderRadius: 3, padding: 5, marginTop: 10 }} onPress={() => checkWikiData()}>
+                    <Text style={{ color: 'black', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>-{x.properties.name}-</Text>
+                  </TouchableOpacity>
+                )}
               </View>
             </ScrollView>)}
         </View>

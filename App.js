@@ -118,7 +118,7 @@ const App = () => {
             name="Attractions"
             component={Attractions}
             options={{
-              title: 'Choose dates and places',
+              title: 'Press to see more details',
               headerStyle: {
                 backgroundColor: '#3D6DCC',
                 fontFamily: 'Architects Daughter Regular'
