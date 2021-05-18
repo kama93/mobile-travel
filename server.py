@@ -134,9 +134,10 @@ def attractions(city, country):
 @app.route("/attractionsCoordinates/<lat>/<lon>", methods=["GET"])
 def attractionsCoordinates(lat, lon):
     lat = float(lat)
-    lon = float(lat)
-    maxLat = lat+0.05
-    maxLot = lon+0.05
+    lon = float(lon)
+    print(lat, lon)
+    maxLat = lat+0.1
+    maxLot = lon+0.1
     apiKEY = '5ae2e3f221c38a28845f05b6b5db6f06770f4edf010d553f8a337b76'
     url = f"https://api.opentripmap.com/0.1/en/places/bbox?lon_min={lon}&lat_min={lat}&lon_max={maxLot}&lat_max={maxLat}&format=geojson&apikey={apiKEY}"
     response = requests.request("GET", url)
