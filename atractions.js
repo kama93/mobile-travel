@@ -90,9 +90,19 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   modalContent: {
+    alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
-    margin: '5%',
+    width:150,
+    height: 150,
+    margin: 20,
+    backgroundColor: 'white',
+    padding:10,
+    borderRadius:10
+  },
+  modalText: {
+    fontFamily: 'Architects Daughter Regular',
+    fontSize: 25,
   },
   modalOverlay: {
     position: 'absolute',
