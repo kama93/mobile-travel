@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useState, useRef } from 'react';
-import { View, StyleSheet, TextInput, ImageBackground, TouchableOpacity, Text, ScrollView, Dimensions, Modal, Pressable} from 'react-native';
+import { View, StyleSheet, TextInput, ImageBackground, TouchableOpacity, TouchableWithoutFeedback, Text, ScrollView, Dimensions, Modal, Pressable } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 
 const screenWidth = Dimensions.get('window').width;
@@ -74,12 +74,6 @@ const styles = StyleSheet.create({
   hotelResultButtonText: {
     fontFamily: 'Architects Daughter Regular',
   },
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22
-  },
   modalView: {
     margin: 20,
     backgroundColor: "white",
@@ -95,19 +89,21 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5
   },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2
+  modalContent: {
+    flex: 1,
+    justifyContent: 'center',
+    margin: '5%',
   },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
+  modalOverlay: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    zIndex: 1001,
   },
-  buttonClose: {
-    backgroundColor: "#2196F3",
-  },
-});
-
+})
 const Attractions = () => {
   const [country, setCountry] = useState('');
   const [city, setCity] = useState('');
@@ -137,10 +133,17 @@ const Attractions = () => {
       })
         .then(response => response.json())
         .then(data => {
-          console.log(data)
           setAttractionsInfo(data)
         })
     }
+  }
+
+  const openModal = () => {
+    setModalVisible(true)
+  }
+
+  const closeModal = () => {
+    setModalVisible(false)
   }
 
   const clean = () => {
@@ -172,7 +175,7 @@ const Attractions = () => {
                 </TouchableOpacity>
               </View>
             </View>) :
-            (<ScrollView style={{ width: screenWidth }}>
+            (
               <View style={{ marginTop: 30, justifyContent: 'center', alignItems: 'center' }}>
                 <TouchableOpacity style={{ backgroundColor: '#3DCC6D', width: 270, borderRadius: 7, marginBottom: 10 }} onPress={() => clean()}>
                   <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>Clean</Text>
@@ -181,29 +184,25 @@ const Attractions = () => {
                   animationType="slide"
                   transparent={true}
                   visible={modalVisible}
-                  onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
-                    setModalVisible(!modalVisible);
-                  }}
+                  dismiss={()=>closeModal()}
+                  onRequestClose={()=>closeModal()}
                 >
-                <View style={styles.modalView}>
-                <View style={styles.centeredView}>
-                <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}
-            >
-              <Text style={styles.textStyle}>Hide Modal</Text>
-            </Pressable>
-                </View>
-                </View>
+                  <TouchableWithoutFeedback onPress={()=>closeModal()}>
+                    <View style={styles.modalOverlay} />
+                  </TouchableWithoutFeedback>
+                  <View style={styles.modalContent}>
+                    <Text>Bllasa</Text>
+                  </View>
                 </Modal>
+                <ScrollView style={{ width: screenWidth }}>
                 {attractionsInfo && attractionsInfo.features.map((x) =>
-                  <TouchableOpacity style={{ backgroundColor: '#d1ddf3', width: screenWidth, borderRadius: 3, padding: 5, marginTop: 10 }} onPress={() => setModalVisible(!modalVisible)}>
+                  <TouchableOpacity key={x.properties.xid} style={{ backgroundColor: '#d1ddf3', width: screenWidth, borderRadius: 3, padding: 5, marginTop: 10 }} onPress={() => openModal()}>
                     <Text style={{ color: 'black', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>-{x.properties.name}-</Text>
                   </TouchableOpacity>
                 )}
+                 </ScrollView>
               </View>
-            </ScrollView>)}
+           )}
         </View>
       </ImageBackground>
     </View>
