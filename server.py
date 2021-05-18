@@ -117,6 +117,7 @@ def scrape(city):
     return jsonify(result)
 
 # attractions API
+#fetch base on city and country name
 @app.route("/attractions/<city>/<country>", methods=["GET"])
 def attractions(city, country):
     # checking coordinates of given city
@@ -131,6 +132,7 @@ def attractions(city, country):
     response = requests.request("GET", url)
     return response.content
 
+#fetch base on coordinates
 @app.route("/attractionsCoordinates/<lat>/<lon>", methods=["GET"])
 def attractionsCoordinates(lat, lon):
     lat = float(lat)
@@ -142,6 +144,22 @@ def attractionsCoordinates(lat, lon):
     url = f"https://api.opentripmap.com/0.1/en/places/bbox?lon_min={lon}&lat_min={lat}&lon_max={maxLot}&lat_max={maxLat}&format=geojson&apikey={apiKEY}"
     response = requests.request("GET", url)
     return response.content
+
+#get wikidata- picture
+@app.route("/wikidata/image/<wikinumber>", methods=["GET"])
+def image(wikinumber):
+    url = f"https://www.wikidata.org/w/api.php?action=wbgetclaims&property=P18&format=json&entity={wikinumber}"
+    response = requests.request("GET", url)
+    #hash sum i nazwa do wysłania
+    return response.content
+
+@app.route("/wikidata/description/<wikinumber>", methods=["GET"])
+def description(wikinumber):
+    # url = f"https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles={name}"
+    url=f'https://www.wikidata.org/w/api.php?action=wbgetentities&ids={wikinumber}&format=json&languages=en&props=descriptions%7Csitelinks%2Furls'
+    response = requests.request("GET", url)
+    return response.content
+
 
 # providing safe info
 @app.route("/safe_info", methods=["GET"])
