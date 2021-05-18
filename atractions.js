@@ -108,6 +108,7 @@ const Attractions = () => {
   const [country, setCountry] = useState('');
   const [city, setCity] = useState('');
   const [attractionsInfo, setAttractionsInfo] = useState(null);
+  const [attractionsDescription, setAttractionsDescription] = useState(null);
   const [myPosition, setMyPosition] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -125,7 +126,6 @@ const Attractions = () => {
   }
 
   const fetchAttractionsWithCurrentPosition = () => {
-    console.log(myPosition)
     if (myPosition.coords && myPosition.coords.latitude && myPosition.coords.longitude) {
       fetch(`http://127.0.0.1:5000/attractionsCoordinates/${myPosition.coords.latitude}/${myPosition.coords.longitude}`, {
         method: 'get',
@@ -138,8 +138,17 @@ const Attractions = () => {
     }
   }
 
-  const openModal = () => {
+  const openModal = (wikiId) => {
     setModalVisible(true)
+    fetch(`http://127.0.0.1:5000/wikidata/description/${wikiId}`, {
+      method: 'get',
+      headers: { 'Content-Type': 'application/json' }
+    })
+      .then(response => response.json())
+      .then(data => { 
+        console.log(data.entities[wikiId].descriptions.en.value)
+        setAttractionsDescription(data.entities[wikiId].descriptions.en.value)
+      })
   }
 
   const closeModal = () => {
@@ -191,12 +200,12 @@ const Attractions = () => {
                     <View style={styles.modalOverlay} />
                   </TouchableWithoutFeedback>
                   <View style={styles.modalContent}>
-                    <Text>Bllasa</Text>
+                    <Text style={styles.modalText}>{attractionsDescription && attractionsDescription.charAt(0).toUpperCase() + attractionsDescription.slice(1)}</Text>
                   </View>
                 </Modal>
                 <ScrollView style={{ width: screenWidth }}>
                 {attractionsInfo && attractionsInfo.features.map((x) =>
-                  <TouchableOpacity key={x.properties.xid} style={{ backgroundColor: '#d1ddf3', width: screenWidth, borderRadius: 3, padding: 5, marginTop: 10 }} onPress={() => openModal()}>
+                  <TouchableOpacity key={x.properties.xid} style={{ backgroundColor: '#d1ddf3', width: screenWidth, borderRadius: 3, padding: 5, marginTop: 10 }} onPress={() => openModal(x.properties.wikidata)}>
                     <Text style={{ color: 'black', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>-{x.properties.name}-</Text>
                   </TouchableOpacity>
                 )}
