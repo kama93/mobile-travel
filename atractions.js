@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useState, useRef } from 'react';
-import { View, StyleSheet, TextInput, ImageBackground, TouchableOpacity, TouchableWithoutFeedback, Text, ScrollView, Dimensions, Modal, Pressable } from 'react-native';
+import { View, StyleSheet, TextInput, ImageBackground, TouchableOpacity, TouchableWithoutFeedback, Text, ScrollView, Dimensions, Modal, Image } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 
 const screenWidth = Dimensions.get('window').width;
@@ -75,11 +75,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Architects Daughter Regular',
   },
   modalView: {
-    margin: 20,
+    // margin: 30,
     backgroundColor: "white",
     borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
+    // padding: 35,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -90,19 +89,22 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   modalContent: {
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center',
-    width:150,
-    height: 150,
-    margin: 20,
-    backgroundColor: 'white',
-    padding:10,
-    borderRadius:10
+    // flex: 1,
+    // justifyContent: 'center',
+    width: 350,
+    height:350,
+    margin: 30,
+    marginTop: 300,
+    marginBottom: 100,
+    padding: 25,
+    borderRadius: 10,
+    backgroundColor: 'rgba(270,270,270,0.8)',
+    zIndex: 1002,
   },
   modalText: {
     fontFamily: 'Architects Daughter Regular',
-    fontSize: 25,
+    fontSize: 20,
+    marginTop: 30
   },
   modalOverlay: {
     position: 'absolute',
@@ -110,15 +112,21 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(0,0,0,0.3)',
     zIndex: 1001,
   },
+  attractionPhoto:{
+    height: 220,
+    width: 220,
+    // marginTop: -100
+  }
 })
 const Attractions = () => {
   const [country, setCountry] = useState('');
   const [city, setCity] = useState('');
   const [attractionsInfo, setAttractionsInfo] = useState(null);
   const [attractionsDescription, setAttractionsDescription] = useState(null);
+  const [attractionsImage, setAttractionsImage] = useState(null);
   const [myPosition, setMyPosition] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -143,7 +151,7 @@ const Attractions = () => {
       })
         .then(response => response.json())
         .then(data => {
-          setAttractionsInfo(data)
+          setAttractionsInfo(data.url)
         })
     }
   }
@@ -154,15 +162,27 @@ const Attractions = () => {
       method: 'get',
       headers: { 'Content-Type': 'application/json' }
     })
-      .then(response => response.json())
-      .then(data => { 
-        console.log(data.entities[wikiId].descriptions.en.value)
-        setAttractionsDescription(data.entities[wikiId].descriptions.en.value)
-      })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data.entities[wikiId].descriptions.en.value)
+      setAttractionsDescription(data.entities[wikiId].descriptions.en.value)
+    })
+    fetch(`http://127.0.0.1:5000//wikidata/image/${wikiId}`, {
+      method: 'get',
+      headers: { 'Content-Type': 'application/json' }
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data)
+      setAttractionsImage(data)
+    })
   }
 
   const closeModal = () => {
     setModalVisible(false)
+    setAttractionsDescription(null)
+    setAttractionsImage(null)
+
   }
 
   const clean = () => {
@@ -203,25 +223,27 @@ const Attractions = () => {
                   animationType="slide"
                   transparent={true}
                   visible={modalVisible}
-                  dismiss={()=>closeModal()}
-                  onRequestClose={()=>closeModal()}
+                  dismiss={() => closeModal()}
+                  onRequestClose={() => closeModal()}
+                  style={styles.modalContainer}
                 >
-                  <TouchableWithoutFeedback onPress={()=>closeModal()}>
+                  <TouchableWithoutFeedback onPress={() => closeModal()}>
                     <View style={styles.modalOverlay} />
                   </TouchableWithoutFeedback>
                   <View style={styles.modalContent}>
+                  {attractionsImage && <Image style={styles.attractionPhoto} source={ attractionsImage} />}
                     <Text style={styles.modalText}>{attractionsDescription && attractionsDescription.charAt(0).toUpperCase() + attractionsDescription.slice(1)}</Text>
                   </View>
                 </Modal>
                 <ScrollView style={{ width: screenWidth }}>
-                {attractionsInfo && attractionsInfo.features.map((x) =>
-                  <TouchableOpacity key={x.properties.xid} style={{ backgroundColor: '#d1ddf3', width: screenWidth, borderRadius: 3, padding: 5, marginTop: 10 }} onPress={() => openModal(x.properties.wikidata)}>
-                    <Text style={{ color: 'black', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>-{x.properties.name}-</Text>
-                  </TouchableOpacity>
-                )}
-                 </ScrollView>
+                  {attractionsInfo && attractionsInfo.features.map((x) =>
+                    <TouchableOpacity key={x.properties.xid} style={{ backgroundColor: '#d1ddf3', width: screenWidth, borderRadius: 3, padding: 5, marginTop: 10 }} onPress={() => openModal(x.properties.wikidata)}>
+                      <Text style={{ color: 'black', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>-{x.properties.name}-</Text>
+                    </TouchableOpacity>
+                  )}
+                </ScrollView>
               </View>
-           )}
+            )}
         </View>
       </ImageBackground>
     </View>

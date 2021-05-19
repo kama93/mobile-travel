@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import requests
 import json
+import hashlib
 from booking_scraper import bkscraper
 from flask import request, jsonify
 from flask_pymongo import PyMongo
@@ -150,8 +151,14 @@ def attractionsCoordinates(lat, lon):
 def image(wikinumber):
     url = f"https://www.wikidata.org/w/api.php?action=wbgetclaims&property=P18&format=json&entity={wikinumber}"
     response = requests.request("GET", url)
-    #hash sum i nazwa do wysłania
-    return response.content
+    res = json.loads(response.content)
+    img = res["claims"]["P18"][0]["mainsnak"]["datavalue"]["value"]
+    img = img.replace(" ", "_")
+    img_hash = hashlib.md5(img.encode("utf-8"))
+    img_hash = img_hash.hexdigest()
+    urlResult = f'https://upload.wikimedia.org/wikipedia/commons/{img_hash[0]}/{img_hash[0:2]}/{img}'
+    result = {'url': urlResult}
+    return jsonify(result)
 
 @app.route("/wikidata/description/<wikinumber>", methods=["GET"])
 def description(wikinumber):
