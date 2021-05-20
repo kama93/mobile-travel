@@ -162,7 +162,6 @@ def image(wikinumber):
 
 @app.route("/wikidata/description/<wikinumber>", methods=["GET"])
 def description(wikinumber):
-    # url = f"https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles={name}"
     url=f'https://www.wikidata.org/w/api.php?action=wbgetentities&ids={wikinumber}&format=json&languages=en&props=descriptions%7Csitelinks%2Furls'
     response = requests.request("GET", url)
     return response.content

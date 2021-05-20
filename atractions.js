@@ -124,6 +124,7 @@ const Attractions = () => {
   const [city, setCity] = useState('');
   const [attractionsInfo, setAttractionsInfo] = useState(null);
   const [attractionsDescription, setAttractionsDescription] = useState(null);
+  const [attractionsUrl, setAttractionsUrl] = useState(null);
   const [attractionsImage, setAttractionsImage] = useState(null);
   const [myPosition, setMyPosition] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
@@ -162,7 +163,14 @@ const Attractions = () => {
     })
     .then(response => response.json())
     .then(data => {
-      console.log(data.entities[wikiId].descriptions.en.value)
+      if(data.entities[wikiId].sitelinks.enwiki){
+        console.log(data.entities[wikiId].sitelinks.enwiki.url)
+        setAttractionsUrl(data.entities[wikiId].sitelinks.enwiki.url)
+      }
+      else{
+        console.log(data.entities[wikiId].sitelinks.alswiki.url)
+        setAttractionsUrl(data.entities[wikiId].sitelinks.alswiki.url)
+      }
       setAttractionsDescription(data.entities[wikiId].descriptions.en.value)
     })
     fetch(`http://127.0.0.1:5000//wikidata/image/${wikiId}`, {
