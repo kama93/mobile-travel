@@ -1,7 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
-import { setCurrentTime } from './redux/action-time';
 import { setCurrentLocation } from './redux/action-location';
 import { setCurrentDirection } from './redux/action';
 import { View, StyleSheet, Text, ImageBackground, TouchableOpacity } from 'react-native';
@@ -85,7 +84,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const Flight = ({ currentDirection, currentLocation, setCurrentTime, setCurrentLocation, setCurrentDirection }) => {
+const Flight = ({ currentDirection, currentLocation, setCurrentLocation, setCurrentDirection }) => {
   const [lookingDataStart, setLookingDataStart] = useState();
   const [lookingDataEnd, setLookingDataEnd] = useState();
   const [startPoint, setStartPoint] = useState(null);
@@ -150,7 +149,6 @@ const Flight = ({ currentDirection, currentLocation, setCurrentTime, setCurrentL
 
   const lookingForFlight = () => {
     setFlight(1);
-    setCurrentTime({ 'start': dateStart, 'last': dateFinal })
     Promise.all([
       fetch(`http://127.0.0.1:5000/flight/${startPoint.code}/${endPoint.code}/${dateStart}`, {
         method: 'get',
@@ -349,7 +347,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
   return {
-    setCurrentTime: time => dispatch(setCurrentTime(time)),
     setCurrentLocation: location => dispatch(setCurrentLocation(location)),
     setCurrentDirection: direction => dispatch(setCurrentDirection(direction))
   }

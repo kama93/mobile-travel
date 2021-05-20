@@ -1,5 +1,7 @@
 import 'react-native-gesture-handler';
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { setCurrentDirection } from './redux/action';
 import { View, StyleSheet, TextInput, ImageBackground, TouchableOpacity, TouchableWithoutFeedback, Text, ScrollView, Dimensions, Modal, Image, Linking } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 
@@ -132,7 +134,7 @@ const styles = StyleSheet.create({
     color: 'white'
   }
 })
-const Attractions = () => {
+const Attractions = ({ currentDirection, setCurrentDirection }) => {
   const [country, setCountry] = useState('');
   const [city, setCity] = useState('');
   const [attractionsInfo, setAttractionsInfo] = useState(null);
@@ -145,6 +147,13 @@ const Attractions = () => {
 
   Geolocation.getCurrentPosition(info => setMyPosition(info));
 
+  useEffect(() => {
+    if (currentDirection) {
+      setCountry(currentDirection.country)
+      setCountry(currentDirection.city)
+    }
+  }, [])
+
   const lookingForAttractions = () => {
     fetch(`http://127.0.0.1:5000/attractions/${city}/${country}`, {
       method: 'get',
@@ -154,6 +163,8 @@ const Attractions = () => {
       .then(data => {
         setAttractionsInfo(data)
       })
+      setCurrentDirection({'country': country})
+      setCurrentDirection({'city': city})
   }
 
   const fetchAttractionsWithCurrentPosition = () => {
@@ -284,5 +295,17 @@ const Attractions = () => {
 };
 
 
+const mapStateToProps = state => ({
+  currentLocation: state.location.currentLocation,
+  currentDirection: state.direction.currentDirection
+});
 
-export default Attractions;
+const mapDispatchToProps = dispatch => {
+  return {
+    setCurrentTime: time => dispatch(setCurrentTime(time)),
+    setCurrentLocation: location => dispatch(setCurrentLocation(location)),
+    setCurrentDirection: direction => dispatch(setCurrentDirection(direction))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Attractions);
