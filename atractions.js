@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useState, useRef } from 'react';
-import { View, StyleSheet, TextInput, ImageBackground, TouchableOpacity, TouchableWithoutFeedback, Text, ScrollView, Dimensions, Modal, Image } from 'react-native';
+import { View, StyleSheet, TextInput, ImageBackground, TouchableOpacity, TouchableWithoutFeedback, Text, ScrollView, Dimensions, Modal, Image, Linking } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 
 const screenWidth = Dimensions.get('window').width;
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     width: 350,
-    height:350,
+    height: 350,
     margin: 30,
     marginTop: 200,
     marginBottom: 100,
@@ -113,10 +113,21 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.3)',
     zIndex: 1001,
   },
-  attractionPhoto:{
+  attractionPhoto: {
     height: 220,
     width: 220,
     marginTop: 20
+  },
+  attractionResultButton: {
+    marginTop: 10,
+    alignItems: "center",
+    backgroundColor: "#3DCC6D",
+    padding: 8,
+    borderRadius: 3,
+  },
+  attractionResultButtonText: {
+    fontFamily: 'Architects Daughter Regular',
+    color: 'white'
   }
 })
 const Attractions = () => {
@@ -138,6 +149,7 @@ const Attractions = () => {
     })
       .then(response => response.json())
       .then(data => {
+        console.log(data.features[0])
         setAttractionsInfo(data)
       })
   }
@@ -161,39 +173,43 @@ const Attractions = () => {
       method: 'get',
       headers: { 'Content-Type': 'application/json' }
     })
-    .then(response => response.json())
-    .then(data => {
-      if(data.entities[wikiId].sitelinks.enwiki){
-        console.log(data.entities[wikiId].sitelinks.enwiki.url)
-        setAttractionsUrl(data.entities[wikiId].sitelinks.enwiki.url)
-      }
-      else{
-        console.log(data.entities[wikiId].sitelinks.alswiki.url)
-        setAttractionsUrl(data.entities[wikiId].sitelinks.alswiki.url)
-      }
-      setAttractionsDescription(data.entities[wikiId].descriptions.en.value)
-    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.entities[wikiId].sitelinks.enwiki) {
+          setAttractionsUrl(data.entities[wikiId].sitelinks.enwiki.url)
+        }
+        else {
+          setAttractionsUrl(data.entities[wikiId].sitelinks.alswiki.url)
+        }
+        setAttractionsDescription(data.entities[wikiId].descriptions.en.value)
+      })
     fetch(`http://127.0.0.1:5000//wikidata/image/${wikiId}`, {
       method: 'get',
       headers: { 'Content-Type': 'application/json' }
     })
-    .then(response => response.json())
-    .then(data => {
-      setAttractionsImage(data)
-    })
+      .then(response => response.json())
+      .then(data => {
+        setAttractionsImage(data)
+      })
+  }
+
+  const handlePress = () => {
+    Linking.openURL(attractionsUrl);
   }
 
   const closeModal = () => {
     setModalVisible(false)
     setAttractionsDescription(null)
     setAttractionsImage(null)
+    setAttractionsUrl(null)
+    setAttractionsInfo(null)
 
   }
 
   const clean = () => {
-    setAttractionsInfo(null)
     setCity('')
     setCountry('')
+
   }
 
   return (
@@ -236,8 +252,13 @@ const Attractions = () => {
                     <View style={styles.modalOverlay} />
                   </TouchableWithoutFeedback>
                   <View style={styles.modalContent}>
-                  {attractionsImage && <Image style={styles.attractionPhoto} source={ attractionsImage} />}
+                    {attractionsImage && 
+                    <Image style={styles.attractionPhoto} source={attractionsImage} />}
                     <Text style={styles.modalText}>{attractionsDescription && attractionsDescription.charAt(0).toUpperCase() + attractionsDescription.slice(1)}</Text>
+                    {attractionsUrl &&
+                    <TouchableOpacity style={styles.attractionResultButton} onPress={() => handlePress()}>
+                      <Text style={styles.attractionResultButtonText}>Check more on Wikipedia</Text>
+                    </TouchableOpacity>}
                   </View>
                 </Modal>
                 <ScrollView style={{ width: screenWidth }}>
