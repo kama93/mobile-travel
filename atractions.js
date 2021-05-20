@@ -75,10 +75,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Architects Daughter Regular',
   },
   modalView: {
-    // margin: 30,
     backgroundColor: "white",
     borderRadius: 20,
-    // padding: 35,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -89,14 +87,14 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   modalContent: {
-    // flex: 1,
-    // justifyContent: 'center',
+    flex: 1,
+    alignItems: 'center',
     width: 350,
     height:350,
     margin: 30,
-    marginTop: 300,
+    marginTop: 200,
     marginBottom: 100,
-    padding: 25,
+    padding: 35,
     borderRadius: 10,
     backgroundColor: 'rgba(270,270,270,0.8)',
     zIndex: 1002,
@@ -104,7 +102,7 @@ const styles = StyleSheet.create({
   modalText: {
     fontFamily: 'Architects Daughter Regular',
     fontSize: 20,
-    marginTop: 30
+    marginTop: 60
   },
   modalOverlay: {
     position: 'absolute',
@@ -118,7 +116,7 @@ const styles = StyleSheet.create({
   attractionPhoto:{
     height: 220,
     width: 220,
-    // marginTop: -100
+    marginTop: 20
   }
 })
 const Attractions = () => {
@@ -173,7 +171,6 @@ const Attractions = () => {
     })
     .then(response => response.json())
     .then(data => {
-      console.log(data)
       setAttractionsImage(data)
     })
   }
