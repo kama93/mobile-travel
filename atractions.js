@@ -124,6 +124,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#3DCC6D",
     padding: 8,
     borderRadius: 3,
+    width: 280
+
   },
   attractionResultButtonText: {
     fontFamily: 'Architects Daughter Regular',
@@ -136,6 +138,7 @@ const Attractions = () => {
   const [attractionsInfo, setAttractionsInfo] = useState(null);
   const [attractionsDescription, setAttractionsDescription] = useState(null);
   const [attractionsUrl, setAttractionsUrl] = useState(null);
+  const [attractionsCoordinates, setAttractionsCoordinates] = useState(null);
   const [attractionsImage, setAttractionsImage] = useState(null);
   const [myPosition, setMyPosition] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
@@ -149,7 +152,6 @@ const Attractions = () => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data.features[0].geometry.coordinates)
         setAttractionsInfo(data)
       })
   }
@@ -167,7 +169,7 @@ const Attractions = () => {
     }
   }
 
-  const openModal = (wikiId) => {
+  const openModal = (wikiId, coordinates) => {
     setModalVisible(true)
     fetch(`http://127.0.0.1:5000/wikidata/description/${wikiId}`, {
       method: 'get',
@@ -191,6 +193,7 @@ const Attractions = () => {
       .then(data => {
         setAttractionsImage(data)
       })
+      setAttractionsCoordinates(coordinates)
   }
 
   const handlePress = () => {
@@ -202,6 +205,7 @@ const Attractions = () => {
     setAttractionsDescription(null)
     setAttractionsImage(null)
     setAttractionsUrl(null)
+    setAttractionsCoordinates(null)
   }
 
   const clean = () => {
@@ -236,7 +240,7 @@ const Attractions = () => {
             </View>) :
             (
               <View style={{ marginTop: 30, justifyContent: 'center', alignItems: 'center' }}>
-                <TouchableOpacity style={{ backgroundColor: '#3DCC6D', width: 270, borderRadius: 7, marginBottom: 10 }} onPress={() => clean()}>
+                <TouchableOpacity style={{ backgroundColor: '#3DCC6D', width: 280, borderRadius: 7, marginBottom: 10 }} onPress={() => clean()}>
                   <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>Clean</Text>
                 </TouchableOpacity>
                 <Modal
@@ -258,11 +262,15 @@ const Attractions = () => {
                       <TouchableOpacity style={styles.attractionResultButton} onPress={() => handlePress()}>
                         <Text style={styles.attractionResultButtonText}>Check more on Wikipedia</Text>
                       </TouchableOpacity>}
+                    {attractionsCoordinates && attractionsUrl &&
+                      <TouchableOpacity style={{ backgroundColor: '#3D6DCC', width: 280, borderRadius: 7, marginRight: 10, marginTop: 15 }} onPress={() => Linking.openURL(`https://www.google.com/maps/dir/?api=1&destination=${attractionsCoordinates[1]},${attractionsCoordinates[0]}&dir_action=navigate`)}>
+                        <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>Check on maps</Text>
+                      </TouchableOpacity>}
                   </TouchableOpacity>
                 </Modal>
                 <ScrollView style={{ width: screenWidth }}>
                   {attractionsInfo && attractionsInfo.features.map((x) =>
-                    <TouchableOpacity key={x.properties.xid} style={{ backgroundColor: '#d1ddf3', width: screenWidth, borderRadius: 3, padding: 5, marginTop: 10 }} onPress={() => openModal(x.properties.wikidata)}>
+                    <TouchableOpacity key={x.properties.xid} style={{ backgroundColor: '#d1ddf3', width: screenWidth, borderRadius: 3, padding: 5, marginTop: 15 }} onPress={() => openModal(x.properties.wikidata, x.geometry.coordinates)}>
                       <Text style={{ color: 'black', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>-{x.properties.name}-</Text>
                     </TouchableOpacity>
                   )}
