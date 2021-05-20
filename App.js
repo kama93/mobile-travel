@@ -98,7 +98,7 @@ const App = () => {
             name="Hotels"
             component={Hotels}
             options={{
-              title: 'Choose dates and places',
+              title: 'Check minimum hotel prices',
               headerStyle: {
                 backgroundColor: '#3D6DCC',
                 fontFamily: 'Architects Daughter Regular'

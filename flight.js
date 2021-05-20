@@ -95,7 +95,7 @@ const Flight = ({ currentDirection, currentLocation, setCurrentTime, setCurrentL
   const [showStart, setShowStart] = useState(false);
   const [showFinal, setShowFinal] = useState(false);
   const [flight, setFlight] = useState(null);
-  const [flightData, setFlightData] = useState();
+  const [flightData, setFlightData] = useState({});
 
   const navigation = useRef(useNavigation());
 
@@ -151,8 +151,6 @@ const Flight = ({ currentDirection, currentLocation, setCurrentTime, setCurrentL
   const lookingForFlight = () => {
     setFlight(1);
     setCurrentTime({ 'start': dateStart, 'last': dateFinal })
-    setCurrentDirection(endPoint.name)
-    setCurrentLocation(startPoint.name)
     Promise.all([
       fetch(`http://127.0.0.1:5000/flight/${startPoint.code}/${endPoint.code}/${dateStart}`, {
         method: 'get',
@@ -170,12 +168,13 @@ const Flight = ({ currentDirection, currentLocation, setCurrentTime, setCurrentL
       })
       .then(data => {
         let jsonData = JSON.stringify(data[0])
-        console.log(jsonData)
         setFlightData(data)
       }
       )
     setFlight(1);
-    setCurrentLocation(null);
+    // będzie potrzebne z fetch nazwa miasta i panstwa
+    setCurrentDirection(endPoint.name)
+    setCurrentLocation(startPoint.name)
   }
 
   const clean = () => {

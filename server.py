@@ -69,7 +69,7 @@ def geo(lat, lng):
     data = pd.read_csv("airports.csv")
     data = data[data["type"].isin(["medium_airport", "large_airport"])]
     data = data[
-        ["latitude_deg", "longitude_deg", "iata_code", "name", "iso_country"]
+        ["latitude_deg", "longitude_deg", "iata_code", "name", "iso_country", "municipality"]
     ].dropna()
     data["target_long"] = lng
     data["target_lat"] = lat
@@ -85,7 +85,7 @@ def geo(lat, lng):
     )
     data["c"] = 2 * np.arctan2(np.sqrt(data["a"]), np.sqrt(1 - data["a"]))
     data = data.nsmallest(4, "c")
-    data = data[["latitude_deg", "longitude_deg", "iata_code", "name", "iso_country"]]
+    data = data[["latitude_deg", "longitude_deg", "iata_code", "name", "iso_country", "municipality"]]
     return jsonify(data.to_dict(orient="rows"))
 
 # autocomplete airport

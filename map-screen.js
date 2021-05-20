@@ -111,7 +111,7 @@ const Map = ( { setCurrentLocation, setCurrentDirection } ) => {
                 <Text style={{ color: '#3D6DCC', padding: 5, fontSize: 20, fontFamily: 'Architects Daughter Regular' }}>Choose starting airport</Text>
                 {
                   from.map(place =>
-                    <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => { setStartPoint({'code': place['iata_code'], 'name':place['name']}) }}>
+                    <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => { setStartPoint({'code': place['iata_code'], 'name':place['name'], 'city':place['municipality'], 'country':place['iso_country']}) }}>
                       <Icon name="plane" size={15} color="black" />
                       <Text style={{ color: 'black', padding: 8, fontFamily: 'Architects Daughter Regular', fontSize: 12 }}>{place['iata_code']} - {place['name']}</Text>
                     </TouchableOpacity>
@@ -129,7 +129,7 @@ const Map = ( { setCurrentLocation, setCurrentDirection } ) => {
             <Text style={{ color: '#3D6DCC', padding: 5, fontSize: 20, fontFamily: 'Architects Daughter Regular' }}>Choose destination airport</Text>
             {
               to.map(place =>
-                <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => { setEndPoint({'code': place['iata_code'], 'name':place['name']}) }}>
+                <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => { setEndPoint({'code': place['iata_code'], 'name':place['name'], 'city':place['municipality'], 'country':place['iso_country']}) }}>
                   <Icon name="plane" size={15} color="black" />
                   <Text style={{ color: 'black', padding: 8, fontFamily: 'Architects Daughter Regular', fontSize: 12 }}>{place['iata_code']} - {place['name']}</Text>
                 </TouchableOpacity>
