@@ -55,13 +55,20 @@ const styles = StyleSheet.create({
     fontSize: 19,
     fontFamily: 'Architects Daughter Regular',
     marginTop: 15,
-    marginLeft:10,
+    marginLeft: 10,
     color: "#3D6DCC"
   },
   inputAutocomplete: {
     fontFamily: 'Architects Daughter Regular',
     fontSize: 20,
     padding: 10,
+  },
+  resultContainer: {
+    marginTop: 30,
+    margin: 10,
+    backgroundColor: 'rgba(270,270,270,0.8)',
+    borderRadius: 10,
+    padding: 15
   },
   containerList: {
     zIndex: 1000,
@@ -71,8 +78,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: 'Architects Daughter Regular',
     marginTop: 25,
-    marginLeft:10,
-    color: "#3D6DCC"
+    color: "#3D6DCC",
   },
   highlight: {
     color: "#3DCC6D"
@@ -96,7 +102,7 @@ const Flight = ({ currentDirection, currentLocation, setCurrentTime, setCurrentL
   useEffect(() => {
     if (currentDirection && currentLocation) {
       setStartPoint(currentLocation),
-      setEndPoint(currentDirection)
+        setEndPoint(currentDirection)
     }
   }, [])
 
@@ -162,13 +168,14 @@ const Flight = ({ currentDirection, currentLocation, setCurrentTime, setCurrentL
           return response.json();
         }));
       })
-      .then(data =>{
+      .then(data => {
         let jsonData = JSON.stringify(data[0])
         console.log(jsonData)
-        setFlightData(data)}
+        setFlightData(data)
+      }
       )
-      setFlight(1);
-      setCurrentLocation(null);
+    setFlight(1);
+    setCurrentLocation(null);
   }
 
   const clean = () => {
@@ -189,7 +196,7 @@ const Flight = ({ currentDirection, currentLocation, setCurrentTime, setCurrentL
   return (
     <View>
       <ImageBackground source={require('./image/plane-background.jpg')} resizeMode='cover' style={styles.image}
-        imageStyle={{ opacity: 0.8 }}
+        imageStyle={{ opacity: 0.4 }}
       >
         {!flight ?
           (<View style={styles.inputBackground}>
@@ -300,32 +307,33 @@ const Flight = ({ currentDirection, currentLocation, setCurrentTime, setCurrentL
             </View>
           </View>)
           :
-          (<View>
+          (<View style={styles.resultContainer}>
             <Text style={styles.textTitle}>The cheapest return flight is: </Text>
             <Text style={styles.textAfter}>
-            To: {startPoint.name} - {endPoint.name} {"\n"}
-            <Text style={styles.highlight}>
-                {"\n"}
-                Departure: {"\n"}
-                Minimum price:{"\n"}
-                Company:{"\n"}
-                Direct:{"\n"}</Text>
-              </Text>
-              <Text style={styles.textAfter}>
-                Back: {endPoint.name} - {startPoint.name}{"\n"}
-                <Text style={styles.highlight}>
+              To: {startPoint.name} - {endPoint.name} {"\n"}
+              <Text style={styles.highlight}>
                 {"\n"}
                 Departure: {"\n"}
                 Minimum price:{"\n"}
                 Company:{"\n"}
                 Direct:{"\n"}
-                </Text>
               </Text>
-            <View style={{ flexDirection: 'row', marginTop: 30 }}>
-              <TouchableOpacity style={{ backgroundColor: '#3D6DCC', width: '50%', borderRadius: 7, marginRight: 10 }} onPress={() => lookingForFlight()}>
+            </Text>
+            <Text style={styles.textAfter}>
+              Back: {endPoint.name} - {startPoint.name}{"\n"}
+              <Text style={styles.highlight}>
+                {"\n"}
+                Departure: {"\n"}
+                Minimum price:{"\n"}
+                Company:{"\n"}
+                Direct:{"\n"}
+              </Text>
+            </Text>
+            <View style={{ flexDirection: 'row', marginTop: 20}}>
+              <TouchableOpacity style={{ backgroundColor: '#3D6DCC', width: '40%', borderRadius: 7, marginRight: 20, marginLeft: 20 }} onPress={() => lookingForFlight()}>
                 <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>Check hotels</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={{ backgroundColor: '#3DCC6D', width: '50%', borderRadius: 7 }} onPress={() => clean()}>
+              <TouchableOpacity style={{ backgroundColor: '#3DCC6D', width: '40%', borderRadius: 7 , marginLeft: 10}} onPress={() => clean()}>
                 <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>CLean</Text>
               </TouchableOpacity>
             </View>
