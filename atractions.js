@@ -149,7 +149,7 @@ const Attractions = () => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data.features[0])
+        console.log(data.features[0].geometry.coordinates)
         setAttractionsInfo(data)
       })
   }
@@ -178,7 +178,7 @@ const Attractions = () => {
         if (data.entities[wikiId].sitelinks.enwiki) {
           setAttractionsUrl(data.entities[wikiId].sitelinks.enwiki.url)
         }
-        else {
+        else if (data.entities[wikiId].sitelinks.alswiki) {
           setAttractionsUrl(data.entities[wikiId].sitelinks.alswiki.url)
         }
         setAttractionsDescription(data.entities[wikiId].descriptions.en.value)
@@ -202,11 +202,10 @@ const Attractions = () => {
     setAttractionsDescription(null)
     setAttractionsImage(null)
     setAttractionsUrl(null)
-    setAttractionsInfo(null)
-
   }
 
   const clean = () => {
+    setAttractionsInfo(null)
     setCity('')
     setCountry('')
 
@@ -227,11 +226,11 @@ const Attractions = () => {
                 </TouchableOpacity>
               </View>
               <View style={{ marginTop: 30, justifyContent: 'center', alignItems: 'center' }}>
-                <TouchableOpacity style={{ backgroundColor: '#3DCC6D', width: 280, borderRadius: 7, marginBottom: 10 }} onPress={() => fetchAttractionsWithCurrentPosition()}>
-                  <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>Get current position</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={{ backgroundColor: '#3D6DCC', width: 280, borderRadius: 7, marginRight: 10 }} onPress={() => lookingForAttractions()}>
+                <TouchableOpacity style={{ backgroundColor: '#3D6DCC', width: 280, borderRadius: 7, marginRight: 10, marginBottom: 10 }} onPress={() => lookingForAttractions()}>
                   <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>Check</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={{ backgroundColor: '#3DCC6D', width: 280, borderRadius: 7 }} onPress={() => fetchAttractionsWithCurrentPosition()}>
+                  <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>Get current position</Text>
                 </TouchableOpacity>
               </View>
             </View>) :
@@ -251,15 +250,15 @@ const Attractions = () => {
                   <TouchableWithoutFeedback onPress={() => closeModal()}>
                     <View style={styles.modalOverlay} />
                   </TouchableWithoutFeedback>
-                  <View style={styles.modalContent}>
-                    {attractionsImage && 
-                    <Image style={styles.attractionPhoto} source={attractionsImage} />}
+                  <TouchableOpacity style={styles.modalContent} onPress={() => closeModal()}>
+                    {attractionsImage &&
+                      <Image style={styles.attractionPhoto} source={attractionsImage} />}
                     <Text style={styles.modalText}>{attractionsDescription && attractionsDescription.charAt(0).toUpperCase() + attractionsDescription.slice(1)}</Text>
                     {attractionsUrl &&
-                    <TouchableOpacity style={styles.attractionResultButton} onPress={() => handlePress()}>
-                      <Text style={styles.attractionResultButtonText}>Check more on Wikipedia</Text>
-                    </TouchableOpacity>}
-                  </View>
+                      <TouchableOpacity style={styles.attractionResultButton} onPress={() => handlePress()}>
+                        <Text style={styles.attractionResultButtonText}>Check more on Wikipedia</Text>
+                      </TouchableOpacity>}
+                  </TouchableOpacity>
                 </Modal>
                 <ScrollView style={{ width: screenWidth }}>
                   {attractionsInfo && attractionsInfo.features.map((x) =>
