@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { StyleSheet, Text, View, ImageBackground, TouchableOpacity, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 let width = Dimensions.get('window').width;
 
-const SecondMenu = () => {
+const SecondMenu = ({ navigation }) => {
 
 
     return (
         <View>
             <ImageBackground source={require('./image/menu.png')} resizeMode='cover' style={styles.image} imageStyle={{ opacity: 0.2 }}>
                 <View style={styles.inputsContainer}>
-                    <TouchableOpacity style={[styles.buttonsMenu, styles.button1]} onPress={() => navigation.navigate()}>
+                    <TouchableOpacity style={[styles.buttonsMenu, styles.button1]} onPress={() => navigation.navigate('SavedInfo')}>
                         <Text style={styles.fullWidthButtonText}>Safety Information</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.buttonsMenu, styles.button2]} onPress={() => navigation.navigate()}>
