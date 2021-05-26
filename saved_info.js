@@ -9,12 +9,11 @@ const SavedInfo = () => {
 
     return (
         <View>
-            <ImageBackground source={require('./image/menu.png')} resizeMode='cover' style={styles.image} imageStyle={{ opacity: 0.2 }}>
+            <ImageBackground source={require('./image/passport.png')} resizeMode='cover' style={styles.image} imageStyle={{ opacity: 0.2 }}>
                 
             </ImageBackground>
         </View>
     )
-}
 
 const styles = StyleSheet.create({
     
