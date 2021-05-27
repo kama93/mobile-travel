@@ -26,16 +26,16 @@ const SavedInfo = () => {
 
     _renderTruncatedFooter = (handlePress) => {
         return (
-            <Text style={{ color: 'grey', marginTop: 5 }} onPress={handlePress}>
-                Read more
+            <Text style={{ color: '#3D6DCC', marginTop: 5, fontFamily: 'Architects Daughter Regular' }} onPress={handlePress}>
+                Read more...
             </Text>
         );
     }
 
     _renderRevealedFooter = (handlePress) => {
         return (
-            <Text style={{ color: 'grey', marginTop: 5 }} onPress={handlePress}>
-                Show less
+            <Text style={{ color: '#3D6DCC', marginTop: 5, fontFamily: 'Architects Daughter Regular' }} onPress={handlePress}>
+                ...Show less
             </Text>
         );
     }
@@ -61,85 +61,103 @@ const SavedInfo = () => {
                             <View style={{ marginTop: 30, justifyContent: 'center', alignItems: 'center' }}>
                                 <ScrollView style={{ width: screenWidth }}>
                                     <View>
-                                        <Text style={styles.mainText}>{info.advisoryText}</Text>
-                                        <Text>Food and water</Text>
-                                        <ReadMore
-                                            numberOfLines={1}
-                                            renderTruncatedFooter={this._renderTruncatedFooter}
-                                            renderRevealedFooter={this._renderRevealedFooter}
-                                        >
-                                            <Text style={{ width: 400 }}>{info.health.diseasesAndVaccinesInfo["Food/Water"][0].description}</Text>
-                                        </ReadMore>
-                                        <Text>Climate</Text>
-                                        <ReadMore
-                                            numberOfLines={1}
-                                            renderTruncatedFooter={this._renderTruncatedFooter}
-                                            renderRevealedFooter={this._renderRevealedFooter}
-                                        >
-                                            <Text>{info.climate.description}</Text>
-                                        </ReadMore>
-                                        <Text>Insects</Text>
-                                        <ReadMore
-                                            numberOfLines={1}
-                                            renderTruncatedFooter={this._renderTruncatedFooter}
-                                            renderRevealedFooter={this._renderRevealedFooter}
-                                        >
-                                            <Text>{info.health.diseasesAndVaccinesInfo.Insects[0].description}</Text>
-                                        </ReadMore>
+                                        <Text style={styles.mainTextTop}>{info.advisoryText}</Text>
+                                        <Text style={styles.mainText}>Food and water</Text>
+                                        <View style={styles.description}>
+                                            <ReadMore
+                                                numberOfLines={2}
+                                                renderTruncatedFooter={this._renderTruncatedFooter}
+                                                renderRevealedFooter={this._renderRevealedFooter}
+                                            >
+                                                <Text style={styles.insideText}>{info.health.diseasesAndVaccinesInfo["Food/Water"][0].description}</Text>
+                                            </ReadMore>
+                                        </View>
+                                        <Text style={styles.mainText}>Climate</Text>
+                                        <View style={styles.description}>
+                                            <ReadMore
+                                                numberOfLines={2}
+                                                renderTruncatedFooter={this._renderTruncatedFooter}
+                                                renderRevealedFooter={this._renderRevealedFooter}
+                                            >
+                                                <Text style={styles.insideText}>{info.climate.description}</Text>
+                                            </ReadMore>
+                                        </View>
+                                        <Text style={styles.mainText}>Insects</Text>
+                                        <View style={styles.description}>
+                                            <ReadMore
+                                                numberOfLines={2}
+                                                renderTruncatedFooter={this._renderTruncatedFooter}
+                                                renderRevealedFooter={this._renderRevealedFooter}
+                                            >
+                                                <Text style={styles.insideText}>{info.health.diseasesAndVaccinesInfo.Insects[0].description}</Text>
+                                            </ReadMore>
+                                        </View>
                                         {info.lawAndCulture.lawAndCultureInfo[7] &&
                                             <View>
-                                                <Text>Climate</Text>
-                                                <ReadMore
-                                                    numberOfLines={1}
-                                                    renderTruncatedFooter={this._renderTruncatedFooter}
-                                                    renderRevealedFooter={this._renderRevealedFooter}
-                                                >
-                                                    <Text>{info.lawAndCulture.lawAndCultureInfo[7].description}</Text>
-                                                </ReadMore>
+                                                <Text style={styles.mainText}>Currency Information</Text>
+                                                <View style={styles.description}>
+                                                    <ReadMore
+                                                        numberOfLines={2}
+                                                        renderTruncatedFooter={this._renderTruncatedFooter}
+                                                        renderRevealedFooter={this._renderRevealedFooter}
+                                                    >
+                                                        <Text style={styles.insideText}>{info.lawAndCulture.lawAndCultureInfo[7].description}</Text>
+                                                    </ReadMore>
+                                                </View>
                                             </View>}
                                         {info.lawAndCulture.lawAndCultureInfo[6] &&
                                             <View>
-                                                <Text>Public transport</Text>
-                                                <ReadMore
-                                                    numberOfLines={1}
-                                                    renderTruncatedFooter={this._renderTruncatedFooter}
-                                                    renderRevealedFooter={this._renderRevealedFooter}
-                                                >
-                                                    <Text>{info.lawAndCulture.lawAndCultureInfo[6].description}</Text>
-                                                </ReadMore>
+                                                <Text style={styles.mainText}>Public transport</Text>
+                                                <View style={styles.description}>
+                                                    <ReadMore
+                                                        numberOfLines={2}
+                                                        renderTruncatedFooter={this._renderTruncatedFooter}
+                                                        renderRevealedFooter={this._renderRevealedFooter}
+                                                    >
+                                                        <Text style={styles.insideText}>{info.lawAndCulture.lawAndCultureInfo[6].description}</Text>
+                                                    </ReadMore>
+                                                </View>
                                             </View>}
                                         {info.lawAndCulture.lawAndCultureInfo[3] &&
                                             <View>
-                                                <Text>Identification</Text>
-                                                <ReadMore
-                                                    numberOfLines={1}
-                                                    renderTruncatedFooter={this._renderTruncatedFooter}
-                                                    renderRevealedFooter={this._renderRevealedFooter}
-                                                >
-                                                    <Text>{info.lawAndCulture.lawAndCultureInfo[3].description}</Text>
-                                                </ReadMore>
+                                                <Text style={styles.mainText}>Identification</Text>
+                                                <View style={styles.description}>
+                                                    <ReadMore
+                                                        numberOfLines={2}
+                                                        renderTruncatedFooter={this._renderTruncatedFooter}
+                                                        renderRevealedFooter={this._renderRevealedFooter}
+                                                    >
+                                                        <Text style={styles.insideText}>{info.lawAndCulture.lawAndCultureInfo[3].description}</Text>
+                                                    </ReadMore>
+                                                </View>
                                             </View>}
-                                        <Text>Medical Care</Text>
-                                        <ReadMore
-                                            numberOfLines={1}
-                                            renderTruncatedFooter={this._renderTruncatedFooter}
-                                            renderRevealedFooter={this._renderRevealedFooter}
-                                        >
-                                            <Text>{info.health.healthInfo[0].description}</Text>
-                                        </ReadMore>
-                                        <Text>Vaccination</Text>
-                                        <ReadMore
-                                            numberOfLines={1}
-                                            renderTruncatedFooter={this._renderTruncatedFooter}
-                                            renderRevealedFooter={this._renderRevealedFooter}
-                                        >
-                                            <Text>Routine vaccination: {info.health.diseasesAndVaccinesInfo.Vaccines[0].description}</Text>
-                                            <Text>Vaccines to consider: {info.health.diseasesAndVaccinesInfo.Vaccines[1].description}</Text>
-                                        </ReadMore>
+                                        <Text style={styles.mainText}>Medical Care</Text>
+                                        <View style={styles.description}>
+                                            <ReadMore
+                                                numberOfLines={2}
+                                                renderTruncatedFooter={this._renderTruncatedFooter}
+                                                renderRevealedFooter={this._renderRevealedFooter}
+                                            >
+                                                <Text style={styles.insideText}>{info.health.healthInfo[0].description}</Text>
+                                            </ReadMore>
+                                        </View>
+                                        <Text style={styles.mainText}>Vaccination</Text>
+                                        <View style={styles.description}>
+                                            <ReadMore
+                                                numberOfLines={2}
+                                                renderTruncatedFooter={this._renderTruncatedFooter}
+                                                renderRevealedFooter={this._renderRevealedFooter}
+                                            >
+                                                <Text style={styles.insideText}>Routine vaccination: {info.health.diseasesAndVaccinesInfo.Vaccines[0].description} {"\n"}</Text>
+                                                <Text style={styles.insideText}>Vaccines to consider: {info.health.diseasesAndVaccinesInfo.Vaccines[1].description}</Text>
+                                            </ReadMore>
+                                        </View>
                                     </View>
-                                    <TouchableOpacity style={{ backgroundColor: '#3DCC6D', width: 270, borderRadius: 7, marginRight: 10 }} onPress={() => clean()}>
-                                    <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>Clean</Text>
-                                </TouchableOpacity>
+                                    <View style={{ marginTop: 30, justifyContent: 'center', alignItems: 'center' }}>
+                                        <TouchableOpacity style={{ backgroundColor: '#3DCC6D', width: 270, borderRadius: 7, marginRight: 10, alignItems: 'center' }} onPress={() => clean()}>
+                                            <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>Clean</Text>
+                                        </TouchableOpacity>
+                                    </View>
                                 </ScrollView>
                             </View>
                         </View>
@@ -168,14 +186,39 @@ const styles = StyleSheet.create({
         margin: 20,
         borderColor: "#505050"
     },
+    mainTextTop: {
+        fontSize: 30,
+        padding: 8,
+        margin: 2,
+        fontFamily: 'Architects Daughter Regular',
+        textAlign: 'center',
+        color: '#3D6DCC'
+    },
     itemText: {
         fontSize: 15,
         padding: 8,
         margin: 2,
         fontFamily: 'Architects Daughter Regular',
-        textAlign: 'center'
+        textAlign: 'center',
     },
-
+    mainText: {
+        fontFamily: 'Architects Daughter Regular',
+        textAlign: 'center',
+        fontSize: 22,
+        marginTop: 10,
+        marginBottom: 10
+    },
+    insideText: {
+        fontFamily: 'Architects Daughter Regular',
+        textAlign: 'center',
+        fontSize: 15,
+    },
+    description: {
+        backgroundColor: 'rgba(270,270,270,0.7)',
+        margin: 20,
+        borderRadius: 10,
+        padding: 10
+    }
 });
 
 export default SavedInfo
