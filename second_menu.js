@@ -14,7 +14,7 @@ const SecondMenu = ({ navigation }) => {
                     <TouchableOpacity style={[styles.buttonsMenu, styles.button1]} onPress={() => navigation.navigate('SavedInfo')}>
                         <Text style={styles.fullWidthButtonText}>Safety Information</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.buttonsMenu, styles.button2]} onPress={() => navigation.navigate()}>
+                    <TouchableOpacity style={[styles.buttonsMenu, styles.button2]} onPress={() => navigation.navigate('Currency')}>
                         <Text style={styles.fullWidthButtonText}>Currency exchange</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.buttonsMenu, styles.button1]} onPress={() => navigation.navigate()}>
