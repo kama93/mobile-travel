@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { PickerIOSItem } from 'react-native';
 import { StyleSheet, Text, View, ImageBackground, TouchableOpacity, Dimensions, TextInput, ScrollView } from 'react-native';
 import Autocomplete from 'react-native-autocomplete-input';
 import { currency } from './currency.List'
@@ -46,47 +47,72 @@ const Currency = () => {
         setArrayToList(checkCurrency(text))
     }
 
+    const pickedFrom = (item) => {
+        setFrom(item)
+    }
+
+    const pickedTo = (item) => {
+        setTo(item)
+    }
+
+    const clean = () =>{
+        setFrom(null)
+        setTo(null)
+        setArrayFromList([])
+        setArrayToList([])
+    }
+
     return (
         <View>
             <ImageBackground source={require('./image/money.png')} resizeMode='cover' style={styles.image} imageStyle={{ opacity: 0.1 }}>
                 <View style={styles.inputBackground}>
-                    <View>
-                        <Autocomplete
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            containerStyle={styles.inputStyle}
-                            style={styles.inputAutocomplete}
-                            listStyle={styles.listStyle}
-                            data={arrayFromList}
-                            onChangeText={text => lookingForCurrencyFrom(text)}
-                            placeholder="From (currency)"
-                            renderItem={({ item, i }) => (
-                                <TouchableOpacity onPress={() => setFrom()}>
-                                    <Text style={styles.itemText}>
-                                        {item.nameCurrency}
-                                    </Text>
-                                </TouchableOpacity>
+                    <View style={styles.containerList1}>
+                        {!from ?
+                            (<Autocomplete
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                containerStyle={styles.inputStyle}
+                                style={styles.inputAutocomplete}
+                                listStyle={styles.listStyle}
+                                data={arrayFromList}
+                                onChangeText={text => lookingForCurrencyFrom(text)}
+                                placeholder="From (currency)"
+                                renderItem={({ item, i }) => (
+                                    <TouchableOpacity onPress={() => pickedFrom([item.currencyCode, item.nameCurrency])}>
+                                        <Text style={styles.itemText}>
+                                            {item.nameCurrency}
+                                        </Text>
+                                    </TouchableOpacity>
+                                )}
+                            />) : (
+                                <Text style={styles.textPicked}>
+                                    {from[1]}
+                                </Text>
                             )}
-                        />
                     </View>
-                    <View>
-                        <Autocomplete
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            containerStyle={styles.inputStyle}
-                            style={styles.inputAutocomplete}
-                            listStyle={styles.listStyle}
-                            data={arrayToList}
-                            onChangeText={text => lookingForCurrencyTo(text)}
-                            placeholder="To (currency)"
-                            renderItem={({ item, i }) => (
-                                <TouchableOpacity onPress={() => setFrom()}>
-                                    <Text style={styles.itemText}>
-                                        {item.nameCurrency}
-                                    </Text>
-                                </TouchableOpacity>
+                    <View style={styles.containerList2}>
+                        {!to ?
+                            (<Autocomplete
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                containerStyle={styles.inputStyle}
+                                style={styles.inputAutocomplete}
+                                listStyle={styles.listStyle}
+                                data={arrayToList}
+                                onChangeText={text => lookingForCurrencyTo(text)}
+                                placeholder="To (currency)"
+                                renderItem={({ item, i }) => (
+                                    <TouchableOpacity onPress={() => pickedTo([item.currencyCode, item.nameCurrency])}>
+                                        <Text style={styles.itemText}>
+                                            {item.nameCurrency}
+                                        </Text>
+                                    </TouchableOpacity>
+                                )}
+                            />) : (
+                                <Text style={styles.textPicked}>
+                                    {to[1]}
+                                </Text>
                             )}
-                        />
                     </View>
                     <View style={{ flexDirection: 'row', marginTop: 30 }}>
                         <TouchableOpacity style={{ backgroundColor: '#3D6DCC', width: '50%', borderRadius: 7, marginRight: 10 }} onPress={() => lookingForFlight()}>
@@ -138,6 +164,18 @@ const styles = StyleSheet.create({
         shadowColor: 'grey',
         shadowOpacity: 1.0,
         marginTop: 100
+    },
+    containerList1: {
+        zIndex: 1001,
+    },
+    containerList2: {
+        zIndex: 1000,
+    },
+    textPicked: {
+        fontSize: 20,
+        fontFamily: 'Architects Daughter Regular',
+        marginBottom: 25,
+        color: "#696969"
     },
 });
 
