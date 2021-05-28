@@ -1,4 +1,4 @@
-[{
+export const currency = [{
     "name": "AFGHANISTAN",
     "currencyCode": "971",
     "currencyName": "AFGHANI"
