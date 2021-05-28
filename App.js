@@ -18,7 +18,7 @@ import MenuButton from './menu_button';
 import SecondMenu from './second_menu';
 import SavedInfo from './saved_info';
 import Currency from './currency'
-
+import Camera from './QR_code'
 
 const Stack = createStackNavigator();
 
@@ -221,6 +221,26 @@ const App = () => {
             component={Currency}
             options={{
               title: 'Check currency exchange rate',
+              headerStyle: {
+                backgroundColor: '#3D6DCC',
+                fontFamily: 'Architects Daughter Regular'
+              },
+              headerTintColor: '#fff',
+              headerBackTitleStyle: {
+                fontFamily: 'Architects Daughter Regular',
+                fontSize: 13
+              },
+              headerTitleStyle: {
+                fontWeight: 'bold',
+                fontFamily: 'Architects Daughter Regular'
+              },
+            }}
+          />
+          <Stack.Screen
+            name="Camera"
+            component={Camera}
+            options={{
+              title: 'Scan QR code',
               headerStyle: {
                 backgroundColor: '#3D6DCC',
                 fontFamily: 'Architects Daughter Regular'

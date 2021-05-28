@@ -35,7 +35,7 @@ const SecondMenu = ({ navigation }) => {
                     <TouchableOpacity style={[styles.buttonsMenu, styles.button2]} onPress={() => navigation.navigate()}>
                         <Text style={styles.fullWidthButtonText}>Movit</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.buttonsMenu, styles.button1]} onPress={() => navigation.navigate()}>
+                    <TouchableOpacity style={[styles.buttonsMenu, styles.button1]} onPress={() => navigation.navigate('Camera')}>
                         <Text style={styles.fullWidthButtonText}>QR code scanner</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.buttonsMenu, styles.button2]} onPress={() => navigation.navigate()}>
