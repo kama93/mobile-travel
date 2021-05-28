@@ -1,22 +1,49 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, ImageBackground, TouchableOpacity, Dimensions, TextInput, ScrollView } from 'react-native';
 import Autocomplete from 'react-native-autocomplete-input';
+import { currency } from './currency.List'
 
 const screenWidth = Dimensions.get('window').width;
 
 const Currency = () => {
-    const [fromCurrency, setFromCurrency] = useState('')
-    const [from, setFrom] = useState('')
-    const [toCurrency, setToCurrency] = useState('')
-    const [to, setTo] = useState('')
+    const [fromCurrency, setFromCurrency] = useState('');
+    const [from, setFrom] = useState('');
+    const [toCurrency, setToCurrency] = useState('');
+    const [to, setTo] = useState('');
+    const [arrayFromList, setArrayFromList] = useState([]);
+    const [arrayToList, setArrayToList] = useState([]);
 
-
-    const lookingForCurrencyFrom = () => {
-
+    const checkCurrency = (text) => {
+        let textLength = text.length
+        let tempArray = []
+        if (textLength >= 2) {
+            for (let i = 0; i < currency.length; i++) {
+                if (text.toUpperCase() === currency[i].currencyName.substring(0, text.length)) {
+                    if (tempArray.length === 0) {
+                        tempArray.push({ 'nameCurrency': currency[i].currencyName, "currencyCode": currency[i].currencyCode })
+                    }
+                    else {
+                        for (let j = 0; j < tempArray.length; j++) {
+                            if (tempArray[j].nameCurrency === currency[i].currencyName) {
+                                break;
+                            }
+                            else {
+                                tempArray.push({ 'nameCurrency': currency[i].currencyName, "currencyCode": currency[i].currencyCode })
+                            }
+                        }
+                    }
+                }
+            }
+            return tempArray
+        }
     }
 
-    const lookingForCurrencyTo = () => {
+    const lookingForCurrencyFrom = (text) => {
+        setArrayFromList(checkCurrency(text))
+    }
 
+    const lookingForCurrencyTo = (text) => {
+        setArrayToList(checkCurrency(text))
     }
 
     return (
@@ -30,16 +57,16 @@ const Currency = () => {
                             containerStyle={styles.inputStyle}
                             style={styles.inputAutocomplete}
                             listStyle={styles.listStyle}
-                            data={fromCurrency}
+                            data={arrayFromList}
                             onChangeText={text => lookingForCurrencyFrom(text)}
                             placeholder="From (currency)"
-                        // renderItem={({ item, i }) => (
-                        //     <TouchableOpacity onPress={() => setFrom()}>
-                        //         <Text style={styles.itemText}>
-
-                        //         </Text>
-                        //     </TouchableOpacity>
-                        // )}
+                            renderItem={({ item, i }) => (
+                                <TouchableOpacity onPress={() => setFrom()}>
+                                    <Text style={styles.itemText}>
+                                        {item.nameCurrency}
+                                    </Text>
+                                </TouchableOpacity>
+                            )}
                         />
                     </View>
                     <View>
@@ -49,16 +76,16 @@ const Currency = () => {
                             containerStyle={styles.inputStyle}
                             style={styles.inputAutocomplete}
                             listStyle={styles.listStyle}
-                            data={toCurrency}
+                            data={arrayToList}
                             onChangeText={text => lookingForCurrencyTo(text)}
                             placeholder="To (currency)"
-                        // renderItem={({ item, i }) => (
-                        //     <TouchableOpacity onPress={() => setFrom()}>
-                        //         <Text style={styles.itemText}>
-
-                        //         </Text>
-                        //     </TouchableOpacity>
-                        // )}
+                            renderItem={({ item, i }) => (
+                                <TouchableOpacity onPress={() => setFrom()}>
+                                    <Text style={styles.itemText}>
+                                        {item.nameCurrency}
+                                    </Text>
+                                </TouchableOpacity>
+                            )}
                         />
                     </View>
                     <View style={{ flexDirection: 'row', marginTop: 30 }}>
