@@ -1,8 +1,8 @@
 # Mobile Travel app (IOS)
 
-Mobile Travel using ReactNative, Python as a server side and MongoDB for database. APIs that was used for now- skyscanner API, booking.com (bkscraper), opentripmaps, wikidata, API travel safe, alphavantage. This app using features like autolocation, camera and Google Maps and it's still in production (working for IOS).
+Mobile Travel using ReactNative, Redux, Python as a server side and MongoDB for database. APIs that was used for now- skyscanner API, booking.com (bkscraper), opentripmaps, wikidata, API travel safe, alphavantage. This app using features like autolocation, camera and Google Maps and it's still in production (working for IOS).
 ## Main screeen:
-Here we have 4 categories to choose: direction, flight, hotel, attractions and also login screen and some other featuresfrom menu.
+Here we have 4 categories to choose: direction, flight, hotel, attractions and also login screen and some other features from menu.
 
 ![picture](img/mainpage.png)
 
@@ -16,3 +16,9 @@ After clicking on 'direction' user is moved to google maps screen and can pick u
 User can manually add country and city for looking flight and then information appears(price, times and date info). Check photo above.
 
 ![picture](img/flight.png)
+
+## Hotel screen:
+User can check hotel prices for chosen city, result screen showing list of hotels with minimal prices, photo and after clicking redirecting to booking.com website to check availability.
+
+![picture](img/hotel1.png)
+![picture](img/hotel2.png)
