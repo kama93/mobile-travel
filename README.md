@@ -11,3 +11,8 @@ After clicking on 'direction' user is moved to google maps screen and can pick u
 
 ![picture](img/direction1.png)
 ![picture](img/direction2.png)
+
+## Flight screen:
+User can manually add country and city for looking flight and then information appears(price, times and date info). Check photo above.
+
+![picture](img/flight.png)
