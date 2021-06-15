@@ -4,7 +4,7 @@ Mobile Travel using ReactNative, Redux, Python as a server side and MongoDB for 
 ## Main screeen:
 Here we have 4 categories to choose: direction, flight, hotel, attractions and also login screen and some other features from menu.
 
-![picture](img/mainpage.png)
+![picture](img/mainpage.png =150x)
 
 ## Direction screen:
 After clicking on 'direction' user is moved to google maps screen and can pick up point on the map, also underline app memorize current location and after that pop up appears on the screen with some 4 closest airports from both places. User needs to choose from one of them and would be redirecting to screen with flight info (app picking up the cheapest connection).
@@ -24,7 +24,7 @@ User can check hotel prices for chosen city, result screen showing list of hotel
 
 |     |  |
 | ----------- | ----------- |
-| ![picture](img/hotel1.png)  | ![picture]![picture](img/hotel2.png)|
+| ![picture](img/hotel1.png)  | ![picture](img/hotel2.png)|
 
 ## Attraction screen:
 User can check attraction for choosen place or simply click on 'current location' and will be moved to result screen with list of result, after clicking on one of them pop up will appear with photo, short description, link to wikipedia page and also to maps(which can help to find best way).
@@ -42,9 +42,7 @@ Login/ registration screen, all info saved in MongoDB.
 ## Second menu screen:
 After clicking on left-top menu on button with 3 horizontal lines screen change to second menu with more features.
 
-|     |  |
-| ----------- | ----------- |
-| ![picture](img/secondMenu.png) |   |
+ ![picture](img/secondMenu.png) 
 
 
 ## Currency screen:
