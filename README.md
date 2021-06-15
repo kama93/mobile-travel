@@ -27,3 +27,7 @@ User can check attraction for choosen place or simply click on 'current location
 
 ![picture](img/attraction1.png) ![picture](img/attraction2.png) ![picture](img/attraction3.png)
 
+## Login/Registration screen:
+Login/ registration screen, all info saved in MongoDB.
+
+![picture](img/login.png) ![picture](img/registration.png) 
