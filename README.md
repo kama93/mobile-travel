@@ -16,6 +16,7 @@ After clicking on 'direction' user is moved to google maps screen and can pick u
 
 ## Flight screen:
 User can manually add country and city for looking flight and then information appears(price, times and date info). Check photo above.
+
 <img src="img/flight.png" alt="drawing" width="250"/>
 
 ## Hotel screen:
@@ -40,8 +41,10 @@ Login/ registration screen, all info saved in MongoDB.
 
 ## Second menu screen:
 After clicking on left-top menu on button with 3 horizontal lines screen change to second menu with more features.
+
 <img src="img/secondMenu.png" alt="drawing" width="250"/>
 
 ## Currency screen:
 You can check currency exchange rate for pick up currencies.
+
 <img src="img/currency.png" alt="drawing" width="250"/>
