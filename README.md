@@ -9,8 +9,12 @@ Here we have 4 categories to choose: direction, flight, hotel, attractions and a
 ## Direction screen:
 After clicking on 'direction' user is moved to google maps screen and can pick up point on the map, also underline app memorize current location and after that pop up appears on the screen with some 4 closest airports from both places. User needs to choose from one of them and would be redirecting to screen with flight info (app picking up the cheapest connection).
 
-![picture](img/direction1.png)
-![picture](img/direction2.png)
+|     |  |
+| ----------- | ----------- |
+| ![picture](img/direction1.png)    | ![picture](img/direction2.png)  |
+
+
+
 
 ## Flight screen:
 User can manually add country and city for looking flight and then information appears(price, times and date info). Check photo above.
