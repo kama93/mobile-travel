@@ -31,3 +31,13 @@ User can check attraction for choosen place or simply click on 'current location
 Login/ registration screen, all info saved in MongoDB.
 
 ![picture](img/login.png) ![picture](img/registration.png) 
+
+## Second menu screen:
+After clicking on left-top menu on button with 3 horizontal lines screen change to second menu with more features.
+
+![picture](img/secondMenu.png)
+
+## Currency screen:
+You can check currency exchange rate for pick up currencies.
+
+![picture](img/currency.png)
