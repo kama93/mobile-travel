@@ -24,17 +24,26 @@ User can manually add country and city for looking flight and then information a
 ## Hotel screen:
 User can check hotel prices for chosen city, result screen showing list of hotels with minimal prices, photo and after clicking redirecting to booking.com website to check availability.
 
-![picture](img/hotel1.png) ![picture](img/hotel2.png)
+|     |  |
+| ----------- | ----------- |
+| ![picture](img/hotel1.png)  | ![picture]![picture](img/hotel2.png)
+  |
 
 ## Attraction screen:
 User can check attraction for choosen place or simply click on 'current location' and will be moved to result screen with list of result, after clicking on one of them pop up will appear with photo, short description, link to wikipedia page and also to maps(which can help to find best way).
 
-![picture](img/attraction1.png) ![picture](img/attraction2.png) ![picture](img/attraction3.png)
+|     |  | |
+| ----------- | ----------- |----------- |
+| ![picture](img/attraction1.png)  | ![picture](img/attraction2.png) |  ![picture](img/attraction3.png)
+  |
+
 
 ## Login/Registration screen:
 Login/ registration screen, all info saved in MongoDB.
-
-![picture](img/login.png) ![picture](img/registration.png) 
+|     |  |
+| ----------- | ----------- |
+| ![picture](img/login.png) |  ![picture](img/registration.png) 
+  |
 
 ## Second menu screen:
 After clicking on left-top menu on button with 3 horizontal lines screen change to second menu with more features.
