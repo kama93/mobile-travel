@@ -429,3 +429,16 @@ def get_safe_info(country):
             headers = {"X-Auth-API-Key": "yz8mfd6q64efb4atr9kq5q2n"}
             response = requests.request("GET", url, headers=headers)
             return response.text
+
+
+# currency fetch
+@app.route('/currency/<fromCurrency>/<toCurrency>', methods=['GET'])
+def currency(fromCurrency, toCurrency):
+    API_KEY = ALPHA_VANTAGE_KEY
+    url = ('https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&'
+            f'from_currency={fromCurrency.upper()}&'
+            f'to_currency={toCurrency.upper()}&'
+            f'apikey={API_KEY}')
+    response = requests.request("GET", url)
+    return response.content
+       
