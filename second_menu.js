@@ -24,16 +24,10 @@ const SecondMenu = ({ navigation }) => {
                         <Text style={styles.fullWidthButtonText}>Liked attractions</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.buttonsMenu, styles.button1]} onPress={() => navigation.navigate()}>
-                        <Text style={styles.fullWidthButtonText}>Calendar</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[styles.buttonsMenu, styles.button2]} onPress={() => navigation.navigate()}>
                         <Text style={styles.fullWidthButtonText}>Thinks to pack</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.buttonsMenu, styles.button1]} onPress={() => navigation.navigate()}>
-                        <Text style={styles.fullWidthButtonText}>Cost estimate</Text>
-                    </TouchableOpacity>
                     <TouchableOpacity style={[styles.buttonsMenu, styles.button2]} onPress={() => navigation.navigate()}>
-                        <Text style={styles.fullWidthButtonText}>Movit</Text>
+                        <Text style={styles.fullWidthButtonText}>Cost estimate</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.buttonsMenu, styles.button1]} onPress={() => navigation.navigate('Camera')}>
                         <Text style={styles.fullWidthButtonText}>QR code scanner</Text>
@@ -58,8 +52,8 @@ const styles = StyleSheet.create({
     inputsContainer: {
         flex: 1,
         flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginTop: 20
     },
     buttonsMenu: {
         height: 60,

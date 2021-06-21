@@ -8,6 +8,7 @@ from booking_scraper import bkscraper
 from flask import request, jsonify
 from flask_pymongo import PyMongo
 from flask_bcrypt import Bcrypt, check_password_hash
+from flask import jsonify, make_response
 
 from selectorlib import Extractor
 from time import sleep
@@ -434,11 +435,8 @@ def get_safe_info(country):
 # currency fetch
 @app.route('/currency/<fromCurrency>/<toCurrency>', methods=['GET'])
 def currency(fromCurrency, toCurrency):
-    API_KEY = ALPHA_VANTAGE_KEY
-    url = ('https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&'
-            f'from_currency={fromCurrency.upper()}&'
-            f'to_currency={toCurrency.upper()}&'
-            f'apikey={API_KEY}')
+    API_KEY = "5aa0c9b9e8f01524140dd2c"
+    url = f'https://v6.exchangerate-api.com/v6/API_KEY/latest/USD'
     response = requests.request("GET", url)
-    return response.content
+    return response.text
        
