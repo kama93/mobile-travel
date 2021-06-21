@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, ImageBackground, Text, Dimensions,  TouchableOpacity, View } from 'react-native';
+import { StyleSheet, ImageBackground, Text, Dimensions, TextInput, TouchableOpacity, View } from 'react-native';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -8,6 +8,17 @@ const SaveInfo = () => {
   return (
     <View style={styles.container}>
         <ImageBackground source={require('./image/sticky.png')} resizeMode='cover' style={styles.image} imageStyle={{ opacity: 0.2 }}>
+            <TouchableOpacity style={styles.textArea}>
+            <TextInput
+                multiline={true}
+                numberOfLines={50}
+                // onChangeText={(text) => this.setState({text})}
+                // value={this.state.text}
+                />
+                <TouchableOpacity style={styles.buttonTextArea}>
+                <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>Add</Text>
+            </TouchableOpacity>
+            </TouchableOpacity>
             <TouchableOpacity style={styles.button}>
                 <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontFamily: 'Architects Daughter Regular' }}>Add new note</Text>
             </TouchableOpacity>
@@ -31,6 +42,21 @@ const styles = StyleSheet.create({
         width: '50%', 
         borderRadius: 7,
         marginTop: 20
+    },
+    textArea:{
+        backgroundColor: 'white', 
+        width: '70%', 
+        borderRadius: 7,
+        marginTop: 20,
+        height: 200,
+        padding: 10,
+        justifyContent: 'center'
+    },
+    buttonTextArea:{
+        backgroundColor: '#3DCC6D', 
+        width: '30%',
+        borderRadius: 7,
+        marginTop: 100 
     }
 });
 
