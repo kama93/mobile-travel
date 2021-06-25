@@ -43,9 +43,9 @@ const App = () => {
               headerStyle: {
                 backgroundColor: '#3D6DCC',
               },
-              headerLeft: () => (
-                <MenuButton />
-              ),
+              // headerLeft: () => (
+              //   <MenuButton />
+              // ),
               headerStyle: {
                 backgroundColor: '#3D6DCC',
               },
@@ -177,7 +177,7 @@ const App = () => {
               },
             }}
           />
-           <Stack.Screen
+           {/* <Stack.Screen
             name="SecondMenu"
             component={SecondMenu}
             options={{
@@ -196,8 +196,8 @@ const App = () => {
                 fontFamily: 'Architects Daughter Regular'
               },
             }}
-          />
-          <Stack.Screen
+          /> */}
+          {/* <Stack.Screen
             name="SavedInfo"
             component={SavedInfo}
             options={{
@@ -216,8 +216,8 @@ const App = () => {
                 fontFamily: 'Architects Daughter Regular'
               },
             }}
-          />
-          <Stack.Screen
+          /> */}
+          {/* <Stack.Screen
             name="Currency"
             component={Currency}
             options={{
@@ -236,8 +236,8 @@ const App = () => {
                 fontFamily: 'Architects Daughter Regular'
               },
             }}
-          />
-          <Stack.Screen
+          /> */}
+          {/* <Stack.Screen
             name="Camera"
             component={Camera}
             options={{
@@ -256,8 +256,8 @@ const App = () => {
                 fontFamily: 'Architects Daughter Regular'
               },
             }}
-          />
-           <Stack.Screen
+          /> */}
+           {/* <Stack.Screen
             name="SaveInfo"
             component={SaveInfo}
             options={{
@@ -276,7 +276,7 @@ const App = () => {
                 fontFamily: 'Architects Daughter Regular'
               },
             }}
-          />
+          /> */}
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
