@@ -11,7 +11,7 @@ After clicking on 'direction' user is moved to google maps screen and can pick u
 
 |     |  | |
 | ----------- | ----------- || ----------- |
-| ![picture](img/2.png)    | ![picture](img/3.png)  |![picture](img/4.png) |
+| <img src="img/2.png" alt="drawing" width="250"/>   | <img src="img/3.png" alt="drawing" width="250"/>  |<img src="img/4.png" alt="drawing" width="250"/>|
 
 
 ## Flight screen:
